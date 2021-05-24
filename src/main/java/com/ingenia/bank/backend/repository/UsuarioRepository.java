@@ -1,7 +1,8 @@
-package com.ingenia.banca.repository;
+package com.ingenia.bank.backend.repository;
 
-import com.ingenia.banca.model.Usuario;
+import com.ingenia.bank.backend.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {

@@ -1,8 +1,8 @@
-package com.ingenia.banca.service.impl;
+package com.ingenia.bank.backend.service.impl;
 
-import com.ingenia.banca.model.Usuario;
-import com.ingenia.banca.repository.UsuarioRepository;
-import com.ingenia.banca.service.UsuarioService;
+import com.ingenia.bank.backend.model.Usuario;
+import com.ingenia.bank.backend.repository.UsuarioRepository;
+import com.ingenia.bank.backend.service.UsuarioService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.ingenia.banca.utils;
+package com.ingenia.bank.backend.utils;
+
+import com.ingenia.bank.backend.model.Movimiento;
+import com.ingenia.bank.backend.model.TipoMovimiento;
 
 import java.util.Iterator;
 import java.util.List;
-
-import com.ingenia.banca.model.Movimiento;
-import com.ingenia.banca.model.TipoMovimiento;
 
 public class Utils {
 	

@@ -1,4 +1,4 @@
-package com.ingenia.banca.payload.filter;
+package com.ingenia.bank.backend.payload.filter;
 
 import java.time.LocalDate;
 

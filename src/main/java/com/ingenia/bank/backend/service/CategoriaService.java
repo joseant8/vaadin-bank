@@ -1,6 +1,6 @@
-package com.ingenia.banca.service;
+package com.ingenia.bank.backend.service;
 
-import com.ingenia.banca.model.Categoria;
+import com.ingenia.bank.backend.model.Categoria;
 
 import java.util.List;
 import java.util.Optional;

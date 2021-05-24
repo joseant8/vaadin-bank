@@ -1,6 +1,6 @@
-package com.ingenia.banca.repository;
+package com.ingenia.bank.backend.repository;
 
-import com.ingenia.banca.model.Categoria;
+import com.ingenia.bank.backend.model.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

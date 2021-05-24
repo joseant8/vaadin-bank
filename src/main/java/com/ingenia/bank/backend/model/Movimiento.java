@@ -1,4 +1,4 @@
-package com.ingenia.banca.model;
+package com.ingenia.bank.backend.model;
 
 import org.springframework.data.annotation.CreatedDate;
 

@@ -1,8 +1,8 @@
-package com.ingenia.banca.payload.filter;
+package com.ingenia.bank.backend.payload.filter;
+
+import com.ingenia.bank.backend.model.TipoMovimiento;
 
 import java.util.Date;
-
-import com.ingenia.banca.model.TipoMovimiento;
 
 public class MovimientosFilter {
     private Long id;

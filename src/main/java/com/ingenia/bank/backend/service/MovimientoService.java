@@ -1,15 +1,12 @@
-package com.ingenia.banca.service;
+package com.ingenia.bank.backend.service;
+
+import com.ingenia.bank.backend.model.Movimiento;
+import com.ingenia.bank.backend.payload.filter.MovimientoMesFilter;
+import com.ingenia.bank.backend.payload.filter.MovimientosFilter;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import com.ingenia.banca.model.Cuenta;
-import com.ingenia.banca.model.Movimiento;
-import com.ingenia.banca.model.Tarjeta;
-import com.ingenia.banca.payload.filter.MovimientoMesFilter;
-import com.ingenia.banca.payload.filter.MovimientosFilter;
 
 @Service
 public interface MovimientoService {
