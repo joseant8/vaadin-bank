@@ -1,4 +1,4 @@
-package com.ingenia.banca.model;
+package com.ingenia.bank.backend.model;
 
 public enum TipoMovimiento {
     INGRESO, GASTO

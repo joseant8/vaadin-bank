@@ -1,10 +1,9 @@
-package com.ingenia.banca.service;
+package com.ingenia.bank.backend.service;
 
-import java.util.List;
-
+import com.ingenia.bank.backend.model.Cuenta;
 import org.springframework.stereotype.Service;
 
-import com.ingenia.banca.model.Cuenta;
+import java.util.List;
 
 @Service
 public interface CuentaService {

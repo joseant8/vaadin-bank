@@ -1,6 +1,6 @@
-package com.ingenia.banca.service;
+package com.ingenia.bank.backend.service;
 
-import com.ingenia.banca.model.Usuario;
+import com.ingenia.bank.backend.model.Usuario;
 
 import java.util.List;
 import java.util.Optional;
