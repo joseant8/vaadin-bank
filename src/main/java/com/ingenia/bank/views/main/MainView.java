@@ -2,8 +2,10 @@ package com.ingenia.bank.views.main;
 
 import java.util.Optional;
 
-import com.ingenia.bank.views.creditcardform.CreditCardFormView;
-import com.ingenia.bank.views.helloworld.HelloWorldView;
+import com.ingenia.bank.views.cuenta.CuentasView;
+import com.ingenia.bank.views.inicio.InicioView;
+import com.ingenia.bank.views.movimiento.MovimientosView;
+import com.ingenia.bank.views.tarjeta.TarjetasView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -79,8 +81,11 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Hello World", HelloWorldView.class),
-                createTab("Credit Card Form", CreditCardFormView.class)};
+        return new Tab[]{createTab("Inicio", InicioView.class),
+                createTab("Cuentas", CuentasView.class),
+                createTab("Tarjetas", TarjetasView.class),
+                createTab("Movimientos", MovimientosView.class)
+        };
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
