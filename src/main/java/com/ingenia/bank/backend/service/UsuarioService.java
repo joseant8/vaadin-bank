@@ -17,6 +17,14 @@ public interface UsuarioService {
 
 
     /**
+     * Obtener usuario de la BD según su nombre de usuario (username)
+     * @param username
+     * @return
+     */
+    public Optional<Usuario> obtenerUsuarioByUsername(String username);
+
+
+    /**
      * Obtener todos los usuarios de la BD
      * @return lista de usuarios
      */

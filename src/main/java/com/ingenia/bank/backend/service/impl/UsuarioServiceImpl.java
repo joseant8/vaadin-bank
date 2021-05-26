@@ -23,6 +23,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    public Optional<Usuario> obtenerUsuarioByUsername(String username) {
+        return usuarioRepositorio.findByUsername(username);
+    }
+
+    @Override
     public List<Usuario> obtenerTodosUsuarios() {
         return usuarioRepositorio.findAll();
     }
