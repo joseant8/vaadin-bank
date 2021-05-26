@@ -2,17 +2,23 @@ package com.ingenia.bank.views.main;
 
 import java.util.Optional;
 
+import com.ingenia.bank.backend.model.Usuario;
+import com.ingenia.bank.backend.service.UsuarioService;
 import com.ingenia.bank.views.cuenta.CuentasView;
 import com.ingenia.bank.views.inicio.InicioView;
 import com.ingenia.bank.views.movimiento.MovimientosView;
 import com.ingenia.bank.views.tarjeta.TarjetasView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.contextmenu.ContextMenu;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -23,6 +29,8 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.router.PageTitle;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -34,7 +42,11 @@ public class MainView extends AppLayout {
     private final Tabs menu;
     private H1 viewTitle;
 
-    public MainView() {
+    private UsuarioService usuarioService;
+
+    public MainView(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+
         setPrimarySection(Section.DRAWER);
         addToNavbar(true, createHeaderContent());
         menu = createMenu();
@@ -53,6 +65,7 @@ public class MainView extends AppLayout {
         viewTitle = new H1();
         layout.add(viewTitle);
         layout.add(new Avatar());
+        layout.add(createAvatarMenu());
         return layout;
     }
 
@@ -111,5 +124,43 @@ public class MainView extends AppLayout {
     private String getCurrentPageTitle() {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
+    }
+
+    private Component createAvatarMenu() {
+
+        HorizontalLayout hl = new HorizontalLayout();
+
+        Icon icon = new Icon(VaadinIcon.ANGLE_DOWN);
+
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setOpenOnClick(true);
+        contextMenu.setTarget(hl);
+
+        contextMenu.addItem("Logout", e -> {
+            contextMenu.getUI().ifPresent(ui -> ui.getPage().setLocation("/logout"));
+        });
+
+        hl.add(new Text(getFullNameCurrentUser()));
+        hl.add(icon);
+        hl.setPadding(true);
+        hl.setAlignItems(FlexComponent.Alignment.AUTO);
+
+        return hl;
+    }
+
+    private Optional<Usuario> getCurrentUser(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = ((UserDetails)principal);
+        Optional<Usuario> usuarioActual = this.usuarioService.obtenerUsuarioByUsername(userDetails.getUsername());
+        return usuarioActual;
+    }
+
+    private String getFullNameCurrentUser(){
+        Optional<Usuario> usuarioActual = getCurrentUser();
+        if(usuarioActual.isPresent()){
+            return usuarioActual.get().getNombreCompleto();
+        }else{
+            return "";
+        }
     }
 }
