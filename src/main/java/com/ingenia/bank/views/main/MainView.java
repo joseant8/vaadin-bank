@@ -15,7 +15,6 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.contextmenu.ContextMenu;
-import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.icon.Icon;
@@ -55,7 +54,6 @@ public class MainView extends AppLayout {
     }
 
     private Component createHeaderContent() {
-
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
         layout.getThemeList().set("dark", true);
@@ -65,11 +63,8 @@ public class MainView extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
-
-        // avatar and logout
-        //layout.add(new Anchor("logout", "Log out"));  // Creates a new Anchor (<a> tag) that links to '/logout'
+        layout.add(new Avatar());
         layout.add(createAvatarMenu());
-
         return layout;
     }
 
@@ -134,7 +129,7 @@ public class MainView extends AppLayout {
 
         HorizontalLayout hl = new HorizontalLayout();
 
-        Avatar avatar = new Avatar();
+        Icon icon = new Icon(VaadinIcon.ANGLE_DOWN);
 
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.setOpenOnClick(true);
@@ -144,9 +139,8 @@ public class MainView extends AppLayout {
             contextMenu.getUI().ifPresent(ui -> ui.getPage().setLocation("/logout"));
         });
 
-        hl.add(avatar);
         hl.add(new Text(getFullNameCurrentUser()));
-        hl.add(new Icon(VaadinIcon.ANGLE_DOWN));
+        hl.add(icon);
         hl.setPadding(true);
         hl.setAlignItems(FlexComponent.Alignment.AUTO);
 
