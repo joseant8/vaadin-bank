@@ -1,17 +1,15 @@
 package com.ingenia.bank.views.inicio;
 
 
-import java.text.ParseException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,17 +20,12 @@ import com.github.appreciated.apexcharts.config.builder.DataLabelsBuilder;
 import com.github.appreciated.apexcharts.config.builder.LegendBuilder;
 import com.github.appreciated.apexcharts.config.builder.ResponsiveBuilder;
 import com.github.appreciated.apexcharts.config.builder.StrokeBuilder;
-import com.github.appreciated.apexcharts.config.builder.TitleSubtitleBuilder;
-import com.github.appreciated.apexcharts.config.builder.XAxisBuilder;
 import com.github.appreciated.apexcharts.config.builder.YAxisBuilder;
 import com.github.appreciated.apexcharts.config.chart.Type;
 import com.github.appreciated.apexcharts.config.chart.builder.ZoomBuilder;
 import com.github.appreciated.apexcharts.config.legend.HorizontalAlign;
 import com.github.appreciated.apexcharts.config.legend.Position;
 import com.github.appreciated.apexcharts.config.stroke.Curve;
-import com.github.appreciated.apexcharts.config.subtitle.Align;
-import com.github.appreciated.apexcharts.config.xaxis.XAxisType;
-import com.github.appreciated.apexcharts.config.xaxis.labels.DatetimeFormatter;
 import com.github.appreciated.apexcharts.helper.Series;
 import com.ingenia.bank.backend.model.Categoria;
 import com.ingenia.bank.backend.model.Movimiento;
@@ -43,16 +36,15 @@ import com.ingenia.bank.backend.service.CategoriaService;
 import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.service.TarjetaService;
 import com.ingenia.bank.backend.utils.Utils;
+import com.ingenia.bank.views.inicio.components.Divider;
+import com.ingenia.bank.views.inicio.components.IconoMovimientoTarjeta;
 import com.ingenia.bank.views.inicio.components.TarjetasDisplayBox;
+import com.ingenia.bank.views.inicio.components.TitleWithLink;
 import com.ingenia.bank.views.main.MainView;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Hr;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -66,6 +58,8 @@ import com.vaadin.flow.router.RouteAlias;
 @PageTitle("Inicio")
 public class InicioView extends HorizontalLayout {
 	
+	private long idCuenta = 1L;
+
 	private Grid<Movimiento> grid;
 	
 	@Autowired
@@ -83,99 +77,81 @@ public class InicioView extends HorizontalLayout {
 
 	
 	public InicioView(TarjetaService tarjetaService,MovimientoService movimientoService,CategoriaService categoriaService) {
+		// Iicializamos los services
 		this.movimientoService = movimientoService;
 		this.tarjetaService =  tarjetaService;
 		this.categoriaService = categoriaService;
+		
 		// Configuracion general de la pantalla incio
 		setSizeFull();
 		setPadding(true);
 		
-		// Create left part of view
+		// Creamos el layout de la parte izquierda
 		VerticalLayout leftLayout = new VerticalLayout();
 		leftLayout.setWidth("60%");
 		
-		HorizontalLayout text = new HorizontalLayout();
-		text.setWidthFull();
-		H2 tituloTarjeta = new H2("Tarjetas");
-		leftLayout.add(tituloTarjeta);
-		tituloTarjeta.getElement().getStyle().set("margin-top", "0");
-		tituloTarjeta.getElement().getStyle().set("margin-right", "auto");
-
-		Anchor anchor = new Anchor("#", "Ver Tarjetas");
-		anchor.getElement().getStyle().set("margin-left", "auto");
-		anchor.getElement().getStyle().set("margin-top", "15px");
-
+		// añadimos el layout de titulo de las tarjetas a la parte izquierda
+		leftLayout.add(new TitleWithLink("Tarjetas","Ver Tarjetas","#"));
 		
-		text.add(tituloTarjeta,anchor);
-		leftLayout.add(text);
+		// creamos el layout para las tarjetas
+		HorizontalLayout layoutTarjetasCredito = new HorizontalLayout();
+		layoutTarjetasCredito.setWidthFull();
+		layoutTarjetasCredito.setPadding(true);
 		
+		//Obtenemos las tarjetas de una cuenta
+		List<Tarjeta> listaTarjetas = this.tarjetaService.obtenerTarjetaByCuenta(idCuenta);
 		
-		HorizontalLayout creditCardLayout = new HorizontalLayout();
-		creditCardLayout.setWidthFull();
-//		creditCardLayout.setHeight("257px");
-		
-
-//		creditCardLayout.setDefaultVerticalComponentAlignment(Alignment.CENTER);
-		creditCardLayout.setPadding(true);
-		
-		List<Tarjeta> listaTarjetas = tarjetaService.obtenerTarjetaByCuenta(1L);
-		
+		// Creamos el card para cada tarjeta hasta un maximo de 3 
 		for (int i = 0; i < listaTarjetas.size() && i < 3; i++) {
 			TarjetasDisplayBox displayTarjeta = new TarjetasDisplayBox(listaTarjetas.get(i), this.movimientoService);
-			creditCardLayout.add(displayTarjeta);
+			layoutTarjetasCredito.add(displayTarjeta);
 		}
 		
-
-		leftLayout.add(creditCardLayout);
+		// Añadimos las tarjetas al layout izquierdo
+		leftLayout.add(layoutTarjetasCredito);
 		
-		
+		// Añadimos una separacion
 		Hr limiter = new Hr();
 		limiter.setWidthFull();
 		leftLayout.add(limiter);
 		
-		
-		HorizontalLayout movimientoLayout = new HorizontalLayout();
-		movimientoLayout.setWidthFull();
-		H2 tituloMovimiento= new H2("Movimientos");
-		leftLayout.add(tituloMovimiento);
-		tituloMovimiento.getElement().getStyle().set("margin-top", "0");
-		tituloMovimiento.getElement().getStyle().set("margin-right", "auto");
-
-		Anchor anchorMovimientos = new Anchor("#", "Ver mas");
-		anchorMovimientos.getElement().getStyle().set("margin-left", "0");
-		anchorMovimientos.getElement().getStyle().set("margin-top", "15px");
-
-		
-		movimientoLayout.add(tituloMovimiento,anchorMovimientos);
-		
+		// Creamos el layout para los movimientos
 		createGrid();
+		List<Movimiento> listaMovimientos = this.movimientoService.obtenerMovimientosDeCuentaOrdenadosFecha(idCuenta);
+		// Obtenemos solo los primeros 6 movimientos para mostrar en la pantalla principal
+		if(listaMovimientos.size() > 6) {
+			listaMovimientos = listaMovimientos.subList(0, 6);
+		}
+		grid.setDataProvider(new ListDataProvider<>(listaMovimientos));
 		
-		grid.setDataProvider(new ListDataProvider<>(this.movimientoService.obtenerMovimientosDeCuentaOrdenadosFecha(1L)));
-		
-		leftLayout.add(movimientoLayout,grid);
+		// Añadimos el titulo y el grid para moviminetos a la vista Izquierda
+		leftLayout.add(new TitleWithLink("Movimientos","Ver mas","#"),grid);
 		
 
 		
-		// Create right part of view
+		// Creamos la parte derecha de la vista
 		VerticalLayout rightLayout = new VerticalLayout();
 		rightLayout.setWidth("40%");
+
+		// Creamos el titulo para el analisis
 		HorizontalLayout textAnalisis = new HorizontalLayout();
-		text.setWidthFull();
+		textAnalisis.setWidthFull();
 		H2 tituloAnalisis = new H2("Balance Cuenta");
-		leftLayout.add(tituloAnalisis);
 		tituloAnalisis.getElement().getStyle().set("margin-top", "0");
 		tituloAnalisis.getElement().getStyle().set("margin-right", "auto");
-
 		textAnalisis.add(tituloAnalisis);
 		
+		// añadimos el titulo a la parte derecha de la pantalla
 		rightLayout.add(textAnalisis);
 		
+		// Creamos la grafica con los gastos del mes actual
+		rightLayout.add(crearGraficagastosMesActual());
 		
-		rightLayout.add(areaChartExample());
-		
+		// Creamos la linea de informacion texto sobre ingresos y retiradas de dinero del mes actual
 		HorizontalLayout gastos = new HorizontalLayout();
 		gastos.setWidthFull();
-		
+
+		// Obtenemos la fecha del mes actual
 		Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int diaFinalMes = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -183,18 +159,20 @@ public class InicioView extends HorizontalLayout {
 		LocalDate fechaInit = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
 		LocalDate fechaFin = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), diaFinalMes);
 		
-		List<Movimiento> movimientosMes =  this.movimientoService.obtenerMovimientoFechaCuenta(1L,fechaInit,fechaFin);
+		// Obtenemos la lista de movimientos del mes actual para la cuenta actual y los gastos y los ingresos del mes
+		List<Movimiento> movimientosMes =  this.movimientoService.obtenerMovimientoFechaCuenta(idCuenta,fechaInit,fechaFin);
 		double gastosMes = Utils.obtenerGastos(movimientosMes); 
 		double ingresosMes = Utils.obtenerIngresos(movimientosMes); 
+		DecimalFormat df = new DecimalFormat("#.##");
 		
-		Span ingresosMensaual = new Span("Ingresos del mes: "+ingresosMes+" €");
+		Span ingresosMensaual = new Span("Ingresos del mes: "+df.format(ingresosMes)+" €");
 		ingresosMensaual.getElement().getStyle().set("margin-top", "0");
 		ingresosMensaual.getElement().getStyle().set("margin-right", "auto");
 		ingresosMensaual.getElement().getStyle().set("color", "#20F14E");
 		ingresosMensaual.getElement().getStyle().set("size", "16px");
 		gastos.add(ingresosMensaual);
 		
-		Span gastosMensaual = new Span("Gastos del mes: "+gastosMes+" €");
+		Span gastosMensaual = new Span("Gastos del mes: "+df.format(gastosMes)+" €");
 		gastosMensaual.getElement().getStyle().set("margin-top", "0");
 		gastosMensaual.getElement().getStyle().set("margin-left", "auto");
 		gastosMensaual.getElement().getStyle().set("color", "#FF0F0F");
@@ -204,38 +182,38 @@ public class InicioView extends HorizontalLayout {
 
 		rightLayout.add(gastos);
 		
-		rightLayout.add(donutChart());
+		// Creamos el grafico de donut de los gastos por categoria
+		rightLayout.add(crearGraficoDonutGastosMesActualPorCategoria());
 		
-		
-		
+		// Añadimos la parte derecha y la parte izquierda separadas por un separador a la vista principal
 		add(leftLayout,new Divider(),rightLayout);
 		
 	}
 	
     /**
-     * Method that generate a grid with the DB products
-     * @return Return a Grid with all the columns and object for product crud
+     * Metodo que se encarga de crear un Grid para la visualizacion de los datos de un movimiento
+     * @return Devuelve un grid con los campos para representar Movimientos
      */
 	private Grid<Movimiento> createGrid() {
 		grid = new Grid<>();
 		grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,GridVariant.LUMO_ROW_STRIPES);
 		
-		
-		// Adding columns to the grid with the Product properties
-//        grid.addColumn(c -> c.getId()).setHeader("Id").setWidth("70px").setFlexGrow(0).setSortable(false);
-
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		grid.addComponentColumn(c -> new IconLayout(c))
+		
+		grid.addComponentColumn(c -> new IconoMovimientoTarjeta(c))
 		.setWidth("100px").setHeader("Tarjeta").setFlexGrow(1);
-		grid.addColumn(c -> c.getCantidad()+" €").setHeader("Cantidad").setFlexGrow(0);
+		grid.addColumn(c -> c.getCantidad()+" €").setHeader("Cantidad").setFlexGrow(1);
         grid.addColumn(c -> c.getConcepto()).setHeader("Concepto").setFlexGrow(1);
-        grid.addColumn(c -> dateFormat.format(c.getFecha())).setHeader("Fecha").setWidth("150px").setFlexGrow(0);
+        grid.addColumn(c -> dateFormat.format(c.getFecha())).setHeader("Fecha").setWidth("125px").setFlexGrow(0);
         
         return grid;
 	}
 	
-	
-    private ApexCharts areaChartExample() {
+	/**
+	 * Metodo para crear la grafica de gastos del mes actual
+	 * @return Devuelve un grafico con los datos de los gastos mensuales del mes actual
+	 */
+    private ApexCharts crearGraficagastosMesActual() {
     	obtenerGastosDiariosMes();
     	
         return ApexChartsBuilder.get()
@@ -258,12 +236,16 @@ public class InicioView extends HorizontalLayout {
                 .build();
     }
 
-	
+	/**
+	 * Metodo encargado de obtenemos los datos de los movimientos para obtener lista de los movimientos y los dias realizados
+	 */
 	private void obtenerGastosDiariosMes() {
+		// Obtenemos las fechas actuales inicial y final
 		Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int diaFinalMes = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		List<Movimiento> movimientos = this.movimientoService.obtenerMovimientoFechaCuenta(1L, LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(),1),
+        
+		List<Movimiento> movimientos = this.movimientoService.obtenerMovimientoFechaCuenta(idCuenta, LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(),1),
 																							LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(), diaFinalMes));
 		List<Double> listaGastos = new ArrayList<Double>();
 		List<String> listaFechas = new ArrayList<String>();
@@ -273,21 +255,24 @@ public class InicioView extends HorizontalLayout {
 		
 		for (Iterator iterator = movimientos.iterator(); iterator.hasNext();) {
 			Movimiento movimiento = (Movimiento) iterator.next();
-			if(fechaUtilizadaActual == null) {
+			if(fechaUtilizadaActual == null) { //Comprobamos si se acaba de entrar en el bucle para inicializar la fecha del movimiento
 				fechaUtilizadaActual = movimiento.getFecha();		
 			}
 			
+			// Si hemos cambiado de fecha del movimiento se procede a guardar los datos recogidos
 			if(!fechaUtilizadaActual.equals(movimiento.getFecha())) {
 				listaGastos.add(gastoDiario);
 				listaFechas.add(fechaUtilizadaActual.getDate()+"/"+Utils.getMonthForInt(fechaUtilizadaActual.getMonth()).substring(0, 3));
-				gastoDiario = 0;
-				fechaUtilizadaActual = movimiento.getFecha();
+				gastoDiario = 0; // Reiniciamos el contador del gasto
+				fechaUtilizadaActual = movimiento.getFecha(); // Almacenemos la fecha del nuevo gasto
 			}
 			
+			// Si el movimiento que se ha realizado es un gasto lo sumamos al contador de gasto
 			if(movimiento.getTipo().equals(TipoMovimiento.GASTO)) {
 				gastoDiario += movimiento.getCantidad();					
 			}
 			
+			// Comprobamos si es el ultimo item del iterador y almacenamos sus datos
 			if(!iterator.hasNext()) {
 				listaGastos.add(gastoDiario);
 				listaFechas.add(fechaUtilizadaActual.getDate()+"/"+Utils.getMonthForInt(fechaUtilizadaActual.getMonth()).substring(0, 3));
@@ -303,11 +288,21 @@ public class InicioView extends HorizontalLayout {
 		
 	}
 
-	private ApexCharts donutChart() {
+	/**
+	 * Metodo encargado de crar el grafico de donut de los gastos por categoria del mes actual
+	 * @return Devuelve el grafico del donut con los datos de gastos del mes actual
+	 */
+	private ApexCharts crearGraficoDonutGastosMesActualPorCategoria() {
 		List<Categoria> listaCategorias = categoriaService.obtenerTodasCategorias();
+		// Obtenemos los nombres de las categorias
 		String[] labes = obtenerLabes(listaCategorias);
+
+		// Obtenemos el valor del gasto por cada categoria
 		Double[] serie = obtenerMovimientos(listaCategorias);
+		
+		// Obtenemos colores aleatorios para cada fragmento del grafico
 		String[] colors = obtenerColores(listaCategorias);
+		
 		return ApexChartsBuilder.get()
                 .withChart(ChartBuilder.get().withType(Type.donut).build())
                 .withLegend(LegendBuilder.get()
@@ -323,6 +318,11 @@ public class InicioView extends HorizontalLayout {
 	}
 
 	
+	/**
+	 * Metodo que se encarga de generar Array con colores en hexadecimal en funcion de la cantidad de categorias que haya
+	 * @param listaCategorias lista de categoria de las que se mirara cuantos colores se tienen que obtener
+	 * @return Devuelve un Array de string con los colore spara las categorias
+	 */
 	private String[] obtenerColores(List<Categoria> listaCategorias) {
 		String[] colores = new String[listaCategorias.size()];
 		Random obj = new Random();
@@ -333,17 +333,27 @@ public class InicioView extends HorizontalLayout {
 		return colores;
 	}
 
+	/**
+	 * Metodo encargado de obtener un array con el valor del gasto que se ha realizado durante el mes actual
+	 * @param listaCategorias
+	 * @return Devuelve un array de double con el valor del gasto diario que se ha realizado dicho mes
+	 */
 	private Double[] obtenerMovimientos(List<Categoria> listaCategorias) {
 		Series<Double> serie = new Series<>();
 		Double[] serieData = new Double[listaCategorias.size()];
 		for (int i = 0; i < listaCategorias.size(); i++) {
 			Categoria categoriaActual = listaCategorias.get(i);
-			serieData[i] = Utils.obtenerGastos(this.movimientoService.obtenerMovimientosCuentaByCategoria(1L,new MovimientoMesFilter("05", categoriaActual.getId())));
+			serieData[i] = Utils.obtenerGastos(this.movimientoService.obtenerMovimientosCuentaByCategoria(idCuenta,new MovimientoMesFilter("05", categoriaActual.getId())));
 		}
 		serie.setData(serieData);
 		return serieData;
 	}
 
+	/**
+	 * Metodo encargado de obtener una lista con los nombres de todas las categorias 
+	 * @param listaCategorias
+	 * @return Devuelve un array de string con los nombres de las categorias
+	 */
 	private String[] obtenerLabes(List<Categoria> listaCategorias) {
 		String[] labelsCategorias = new String[listaCategorias.size()];
 		for (int i = 0; i < listaCategorias.size(); i++) {
@@ -352,33 +362,5 @@ public class InicioView extends HorizontalLayout {
 		return labelsCategorias;
 	}
 
-
-	public class IconLayout extends HorizontalLayout{
-		public IconLayout(Movimiento movimiento) {
-			super();
-			Image img ;
-			if(movimiento.getTipo().equals(TipoMovimiento.INGRESO)) {
-				img = new Image("images/profit.png", "Profit");
-			}else {
-				img = new Image("images/devaluation.png", "visa");
-			}
-			img.setWidth("20px");
-			img.setHeight("20px");				
-	        add(img, new Span(movimiento.getTarjeta() != null ? Utils.enmascararNumeroTarjeta(movimiento.getTarjeta().getNumero()) : ""));
-	        
-			
-		}
-	}
-	
-	public class Divider extends Span {
-
-	    public Divider() {
-	        getStyle().set("background-color", "grey");
-	        getStyle().set("opacity", "0.3");
-	        getStyle().set("flex", "0 0 1px");
-	        getStyle().set("align-self", "stretch");
-	    }
-	}
-	
 	
 }

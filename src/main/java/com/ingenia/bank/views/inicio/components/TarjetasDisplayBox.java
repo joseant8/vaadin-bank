@@ -47,8 +47,15 @@ public class TarjetasDisplayBox extends ClickableCard {
         
         List<Movimiento> listaMovimientos = movimientoService.obtenerMovimientoFechaTarjeta(tarjeta.getId(), start, end);
         
-        Span saldoTexto = new Span(Utils.obtenerSaldoDeMovimientosFormateado(listaMovimientos)+" €");
-        saldoTexto.getElement().getStyle().set("color", "#D01E69");
+        double balance = Utils.obtenerSaldoDeMovimientos(listaMovimientos);
+        Span saldoTexto = new Span();
+        if(balance < 0) {
+        	balance *= -1;
+        	saldoTexto.getElement().getStyle().set("color", "#D01E69");
+        }else {
+        	saldoTexto.getElement().getStyle().set("color", "#73CAA5");
+        }
+        saldoTexto.add(balance+" €");
         saldoTexto.getElement().getStyle().set("font-weight", "bold");
         layout.setHorizontalComponentAlignment(Alignment.CENTER,
         		saldoTexto);
