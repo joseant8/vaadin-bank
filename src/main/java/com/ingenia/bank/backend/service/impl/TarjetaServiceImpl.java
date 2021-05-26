@@ -25,9 +25,9 @@ public class TarjetaServiceImpl implements TarjetaService {
 
 	@Transactional
 	@Override
-	public List<Tarjeta> obtenerTarjetaByCuenta(Cuenta cuenta) {
-		Long id = cuenta.getId();
-		return tarjetaRepository.findByCuentaId(id);
+	public List<Tarjeta> obtenerTarjetaByCuenta(Long cuentaId) {
+		
+		return tarjetaRepository.findByCuentaId(cuentaId);
 	}
 
 	@Transactional

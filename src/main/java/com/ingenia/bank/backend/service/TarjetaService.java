@@ -1,6 +1,5 @@
 package com.ingenia.bank.backend.service;
 
-import com.ingenia.bank.backend.model.Cuenta;
 import com.ingenia.bank.backend.model.Tarjeta;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +10,7 @@ public interface TarjetaService {
 	
 	public Tarjeta crearTarjeta(Tarjeta tarjetaNueva);
 	
-	public List<Tarjeta> obtenerTarjetaByCuenta(Cuenta cuenta);
+	public List<Tarjeta> obtenerTarjetaByCuenta(Long cuentaId);
 
 	public Tarjeta obtenerTarjetaByNumeroTarjeta(Long numeroTarjeta);
 	
