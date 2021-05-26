@@ -44,7 +44,8 @@ public class MainView extends AppLayout {
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
-        layout.getThemeList().set("dark", true);
+//        layout.getThemeList().set("dark", true);
+        layout.getElement().getStyle().set("backgorund-color", "#E5E5E5");
         layout.setWidthFull();
         layout.setSpacing(false);
         layout.setAlignItems(FlexComponent.Alignment.CENTER);

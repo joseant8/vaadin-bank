@@ -91,7 +91,7 @@ public class InicioView extends HorizontalLayout {
 		leftLayout.setWidth("60%");
 		
 		// añadimos el layout de titulo de las tarjetas a la parte izquierda
-		leftLayout.add(new TitleWithLink("Tarjetas","Ver Tarjetas","#"));
+		leftLayout.add(new TitleWithLink("Tarjetas","Ver Tarjetas","tarjetas"));
 		
 		// creamos el layout para las tarjetas
 		HorizontalLayout layoutTarjetasCredito = new HorizontalLayout();
@@ -103,7 +103,7 @@ public class InicioView extends HorizontalLayout {
 		
 		// Creamos el card para cada tarjeta hasta un maximo de 3 
 		for (int i = 0; i < listaTarjetas.size() && i < 3; i++) {
-			TarjetasDisplayBox displayTarjeta = new TarjetasDisplayBox(listaTarjetas.get(i), this.movimientoService);
+			TarjetasDisplayBox displayTarjeta = new TarjetasDisplayBox(listaTarjetas.get(i), this.movimientoService, this.tarjetaService);
 			layoutTarjetasCredito.add(displayTarjeta);
 		}
 		
@@ -125,7 +125,7 @@ public class InicioView extends HorizontalLayout {
 		grid.setDataProvider(new ListDataProvider<>(listaMovimientos));
 		
 		// Añadimos el titulo y el grid para moviminetos a la vista Izquierda
-		leftLayout.add(new TitleWithLink("Movimientos","Ver mas","#"),grid);
+		leftLayout.add(new TitleWithLink("Movimientos","Ver mas","movimientos"),grid);
 		
 
 		
