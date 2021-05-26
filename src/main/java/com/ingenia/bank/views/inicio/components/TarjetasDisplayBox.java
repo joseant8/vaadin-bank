@@ -8,10 +8,8 @@ import com.ingenia.bank.backend.model.Movimiento;
 import com.ingenia.bank.backend.model.Tarjeta;
 import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.utils.Utils;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
@@ -20,7 +18,8 @@ public class TarjetasDisplayBox extends ClickableCard {
 	MovimientoService movimientoService;
 
 	public TarjetasDisplayBox(Tarjeta tarjeta,MovimientoService movimientoService) {
-		super(componentEvent -> Notification.show("Click Card "+tarjeta.getNumero()));
+		super();
+//		super(componentEvent -> Notification.show("Click Card "+tarjeta.getNumero())); // TODO implementar click tarjeta especifica
 		this.movimientoService = movimientoService;
 		
 		// Set some style
