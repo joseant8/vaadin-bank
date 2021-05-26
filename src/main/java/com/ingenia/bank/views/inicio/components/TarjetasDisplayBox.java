@@ -32,12 +32,23 @@ public class TarjetasDisplayBox extends ClickableCard {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         
+        HorizontalLayout icon = new HorizontalLayout();
         // Icono entidad
-        Span bancoEntidad = new Span("Ingenia Bank");
-        bancoEntidad.getElement().getStyle().set("font-family", "DM Sans");
-        bancoEntidad.getElement().getStyle().set("font-weight", "bold");
-        bancoEntidad.getElement().getStyle().set("color", "#090A25");
-        layout.add(bancoEntidad);
+        Image imgLogo1 = new Image("images/ingenia.svg", "Ingenia");
+        imgLogo1.setWidth("40px");
+        imgLogo1.setHeight("25px");
+        Image imgLogo2 = new Image("images/bank.svg", "Ingenia");
+        imgLogo2.setWidth("30px");
+        imgLogo2.setHeight("20px");
+        imgLogo2.getElement().getStyle().set("margin-left", "1px");
+        icon.add(imgLogo1,imgLogo2);
+
+        layout.add(icon);
+//        Span bancoEntidad = new Span("Ingenia Bank");
+//        bancoEntidad.getElement().getStyle().set("font-family", "DM Sans");
+//        bancoEntidad.getElement().getStyle().set("font-weight", "bold");
+//        bancoEntidad.getElement().getStyle().set("color", "#090A25");
+//        layout.add(bancoEntidad);
         
       
         // Get saldo
@@ -74,6 +85,8 @@ public class TarjetasDisplayBox extends ClickableCard {
 
         Span tarjetaNumber = new Span(Utils.enmascararNumeroTarjeta(tarjeta.getNumero()));
         tarjetaNumber.getElement().getStyle().set("margin-left", "auto");
+        tarjetaNumber.getElement().getStyle().set("color", "#D01E69");
+        tarjetaNumber.getElement().getStyle().set("font-weight", "bold");
         downPart.add(tarjetaNumber);
         
         downPart.getElement().getStyle().set("margin-top", "auto");
