@@ -34,10 +34,10 @@ public class TarjetasDisplayBox extends ClickableCard {
         
         HorizontalLayout icon = new HorizontalLayout();
         // Icono entidad
-        Image imgLogo1 = new Image("images/ingenia.svg", "Ingenia");
+        Image imgLogo1 = new Image("images/ingenia.svg", "Ingenia Bank");
         imgLogo1.setWidth("40px");
         imgLogo1.setHeight("25px");
-        Image imgLogo2 = new Image("images/bank.svg", "Ingenia");
+        Image imgLogo2 = new Image("images/bank.svg", "Ingenia Bank");
         imgLogo2.setWidth("30px");
         imgLogo2.setHeight("20px");
         imgLogo2.getElement().getStyle().set("margin-left", "1px");
