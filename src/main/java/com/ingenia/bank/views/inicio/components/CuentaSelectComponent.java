@@ -22,6 +22,8 @@ public class CuentaSelectComponent extends Dialog{
 	public CuentaSelectComponent(List<Cuenta> listaCuentas) {
 		super();
 		setWidth("70%");
+		setCloseOnEsc(false);
+		setCloseOnOutsideClick(false);
 		createGrid();
 		
 		grid.setDataProvider(new ListDataProvider<>(listaCuentas));
