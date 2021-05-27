@@ -1,5 +1,6 @@
 package com.ingenia.bank.views.inicio.components;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class TarjetasDisplayBox extends ClickableCard {
         LocalDate initial = LocalDate.now();
         LocalDate start = initial.withDayOfMonth(1);
         LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
+        DecimalFormat df = new DecimalFormat("#.##");
         
         List<Movimiento> listaMovimientos = movimientoService.obtenerMovimientoFechaTarjeta(tarjeta.getId(), start, end);
         
@@ -67,7 +69,7 @@ public class TarjetasDisplayBox extends ClickableCard {
         }else {
         	saldoTexto.getElement().getStyle().set("color", "#73CAA5");
         }
-        saldoTexto.add(balance+" €");
+        saldoTexto.add(df.format(balance)+" €");
         saldoTexto.getElement().getStyle().set("font-weight", "bold");
         layout.setHorizontalComponentAlignment(Alignment.CENTER,
         		saldoTexto);
