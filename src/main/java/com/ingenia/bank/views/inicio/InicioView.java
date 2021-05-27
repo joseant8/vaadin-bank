@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import com.ingenia.bank.components.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.appreciated.apexcharts.ApexCharts;
@@ -41,11 +42,6 @@ import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.service.TarjetaService;
 import com.ingenia.bank.backend.service.UsuarioService;
 import com.ingenia.bank.backend.utils.Utils;
-import com.ingenia.bank.views.inicio.components.CuentaSelectComponent;
-import com.ingenia.bank.views.inicio.components.Divider;
-import com.ingenia.bank.views.inicio.components.IconoMovimientoTarjeta;
-import com.ingenia.bank.views.inicio.components.TarjetasDisplayBox;
-import com.ingenia.bank.views.inicio.components.TitleWithLink;
 import com.ingenia.bank.views.main.MainView;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
