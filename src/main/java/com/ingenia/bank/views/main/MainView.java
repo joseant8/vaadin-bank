@@ -62,8 +62,12 @@ public class MainView extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
-        layout.add(new Avatar());
+
+        Avatar avatar = new Avatar();
+        avatar.setImage("images/avatar.svg");
+        layout.add(avatar);
         layout.add(createAvatarMenu());
+
         return layout;
     }
 
@@ -77,8 +81,14 @@ public class MainView extends AppLayout {
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new Image("images/logo.png", "Bank App logo"));
-        logoLayout.add(new H1("Bank App"));
+        Image ingeniaImage = new Image("images/ingenia.svg", "Ingenia logo");
+        Image bankImage = new Image("images/bank.svg", "Bank");
+        ingeniaImage.setWidth("40%");
+        bankImage.setWidth("25%");
+        bankImage.getElement().getStyle().set("margin-left", "1px");
+        logoLayout.add(ingeniaImage);
+        logoLayout.add(bankImage);
+        //logoLayout.add(new H1("Bank App"));
         layout.add(logoLayout, menu);
         return layout;
     }
