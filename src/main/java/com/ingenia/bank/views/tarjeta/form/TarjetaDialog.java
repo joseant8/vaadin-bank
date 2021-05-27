@@ -8,7 +8,7 @@ import com.ingenia.bank.backend.model.Movimiento;
 import com.ingenia.bank.backend.model.Tarjeta;
 import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.service.TarjetaService;
-import com.ingenia.bank.views.inicio.components.IconoMovimientoTarjeta;
+import com.ingenia.bank.components.IconoMovimientoTarjeta;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
