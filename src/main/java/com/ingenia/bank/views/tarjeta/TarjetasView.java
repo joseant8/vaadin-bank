@@ -7,6 +7,7 @@ import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.service.TarjetaService;
 import com.ingenia.bank.views.main.MainView;
 import com.ingenia.bank.views.tarjeta.form.TarjetaDialog;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
@@ -21,7 +22,7 @@ public class TarjetasView extends VerticalLayout {
 	
 	private Grid<Tarjeta> grid = new Grid<>();
 	
-	private Long idCuenta = 1L;
+	private Long idCuenta;
 	
 	@Autowired
 	private TarjetaService tarjetaService;
@@ -33,6 +34,8 @@ public class TarjetasView extends VerticalLayout {
 		this.movimientoService = movimientoService;
 		this.tarjetaService = tarjetaService;
 		setSizeFull();
+		
+		idCuenta = (Long) UI.getCurrent().getSession().getAttribute("idCuenta");
 		
 		createGrid();
 		grid.setDataProvider(new ListDataProvider<>(tarjetaService.obtenerTarjetaByCuenta(idCuenta)));
