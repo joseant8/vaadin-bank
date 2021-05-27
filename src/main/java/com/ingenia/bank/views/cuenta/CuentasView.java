@@ -1,8 +1,10 @@
 package com.ingenia.bank.views.cuenta;
 
 import com.ingenia.bank.backend.model.Cuenta;
+import com.ingenia.bank.backend.model.Usuario;
 import com.ingenia.bank.backend.service.CuentaService;
 import com.ingenia.bank.backend.service.MovimientoService;
+import com.ingenia.bank.backend.service.UsuarioService;
 import com.ingenia.bank.views.cuenta.form.CuentaDialog;
 import com.ingenia.bank.views.main.MainView;
 import com.vaadin.flow.component.grid.Grid;
@@ -13,26 +15,29 @@ import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.util.Optional;
+
 @Route(value = "cuentas", layout = MainView.class)
 @PageTitle("Cuentas")
 public class CuentasView extends VerticalLayout {
 
     private Grid<Cuenta> grid = new Grid<>();
 
-    private Long idUsuario = 1L;
+    private Optional<Usuario> currentUser;
 
     private CuentaService cuentaService;
     private MovimientoService movimientoService;
 
-    public CuentasView(CuentaService cuentaService, MovimientoService movimientoService) {
+    public CuentasView(CuentaService cuentaService, MovimientoService movimientoService, UsuarioService usuarioService) {
 
         this.movimientoService = movimientoService;
         this.cuentaService = cuentaService;
+        this.currentUser = usuarioService.obtenerUsuarioActualConectado();
 
         setSizeFull();
         createGrid();
 
-        this.grid.setDataProvider(new ListDataProvider<>(cuentaService.obtenerTodasCuentasByUsuarioId(idUsuario)));
+        this.grid.setDataProvider(new ListDataProvider<>(cuentaService.obtenerTodasCuentasByUsuarioId(currentUser.get().getId())));
         this.grid.addItemClickListener(event -> {
             new CuentaDialog(this.cuentaService, this.movimientoService, event.getItem().getId()).open();
         });
