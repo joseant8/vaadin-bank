@@ -1,4 +1,4 @@
-package com.ingenia.bank.views.inicio.components;
+package com.ingenia.bank.components;
 
 import com.ingenia.bank.backend.model.Movimiento;
 import com.ingenia.bank.backend.model.TipoMovimiento;

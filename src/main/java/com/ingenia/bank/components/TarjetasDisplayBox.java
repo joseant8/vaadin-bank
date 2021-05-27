@@ -1,4 +1,4 @@
-package com.ingenia.bank.views.inicio.components;
+package com.ingenia.bank.components;
 
 import java.time.LocalDate;
 import java.util.List;
