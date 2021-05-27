@@ -29,8 +29,6 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.router.PageTitle;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -149,10 +147,7 @@ public class MainView extends AppLayout {
     }
 
     private Optional<Usuario> getCurrentUser(){
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDetails userDetails = ((UserDetails)principal);
-        Optional<Usuario> usuarioActual = this.usuarioService.obtenerUsuarioByUsername(userDetails.getUsername());
-        return usuarioActual;
+        return usuarioService.obtenerUsuarioActualConectado();
     }
 
     private String getFullNameCurrentUser(){
