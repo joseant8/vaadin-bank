@@ -1,7 +1,6 @@
 package com.ingenia.bank.backend.service;
 
 import com.ingenia.bank.backend.model.Usuario;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -37,5 +36,13 @@ public interface UsuarioService {
      * @return usuario creado
      */
     public Optional<Usuario> crearUsuario(Usuario usuario);
+
+
+    /**
+     * Devuelve el usuario actual que está conectado (autenticado).
+     * @return
+     */
+    public Optional<Usuario> obtenerUsuarioActualConectado();
+
 
 }

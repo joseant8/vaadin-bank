@@ -3,6 +3,8 @@ package com.ingenia.bank.backend.service.impl;
 import com.ingenia.bank.backend.model.Usuario;
 import com.ingenia.bank.backend.repository.UsuarioRepository;
 import com.ingenia.bank.backend.service.UsuarioService;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,5 +43,13 @@ public class UsuarioServiceImpl implements UsuarioService {
             Usuario usuarioCreado = usuarioRepositorio.save(usuario);
             return Optional.of(usuarioCreado);
         }
+    }
+
+    @Override
+    public Optional<Usuario> obtenerUsuarioActualConectado() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails userDetails = ((UserDetails)principal);
+        Optional<Usuario> usuarioActual = obtenerUsuarioByUsername(userDetails.getUsername());
+        return usuarioActual;
     }
 }
