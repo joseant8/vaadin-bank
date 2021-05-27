@@ -8,6 +8,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -38,7 +39,7 @@ public class MovimientosView extends VerticalLayout {
         this.movimientosList = movimientoService.obtenerMovimientosDeCuenta(this.idCuentaActual);
 
         setPadding(true);
-        add(createGridMovimientos());
+        add(new H2("Movimientos"), createGridMovimientos());
     }
 
 
