@@ -1,5 +1,5 @@
 INSERT INTO usuario (nombre_completo, username, password) values
-    ('Juan Sebastian Gonzalez Sanchez', 'jsgonzalez@email.com', '$2a$10$lBzSDeiPcfCrOXBljvc1BOyI32oa9BXfhks6xBx8WubO5WdfLnh3a'),
+    ('Juan Sebastian Gonzalez Sanchez', 'jsgonzalez@email.com', '$2a$11$TckEYxY/0DPf6OfpQhXKP./hl45UlgXYs0jQFsZZCwBEjUCo7bUKy'),
     ('Jose Antonio Marí Martín', 'jose@email.com', '$2a$10$lBzSDeiPcfCrOXBljvc1BOyI32oa9BXfhks6xBx8WubO5WdfLnh3a'),
     ('Sara Martínez Martínez', 'sara@email.com', '$2a$10$lBzSDeiPcfCrOXBljvc1BOyI32oa9BXfhks6xBx8WubO5WdfLnh3a'),
     ('Alejandro Tur Costa', 'al@email.com', '$2a$10$lBzSDeiPcfCrOXBljvc1BOyI32oa9BXfhks6xBx8WubO5WdfLnh3a'),
@@ -47,5 +47,5 @@ INSERT INTO usuario_cuenta (usuario_id, cuenta_id) values
     (2, 2),
     (3, 3),
     (4, 3),
-    (4, 4)
+    (1, 4)
     ;
