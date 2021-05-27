@@ -10,6 +10,7 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.data.provider.ListDataProvider;
 
 public class CuentaSelectComponent extends Dialog{
@@ -29,7 +30,7 @@ public class CuentaSelectComponent extends Dialog{
 			cuenta = event.getItem();
 			this.close();
 		});
-		add(grid);
+		add(new H2("Seleccione la cuenta a la que quiere acceder:"),grid);
 	}
 
     /**
@@ -45,7 +46,7 @@ public class CuentaSelectComponent extends Dialog{
 		
 		grid.addColumn(c -> c.getIban()).setHeader("Iban").setFlexGrow(1);
         grid.addColumn(c -> c.getSaldo()).setHeader("Saldo").setFlexGrow(1);
-        grid.addColumn(c -> dateFormat.format(c.getFechaCreacion())).setHeader("Fecha Creacion").setWidth("125px").setFlexGrow(0);
+        grid.addColumn(c -> dateFormat.format(c.getFechaCreacion())).setHeader("Fecha Creacion").setWidth("250px").setFlexGrow(0);
         
         return grid;
 	}
