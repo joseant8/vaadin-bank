@@ -40,6 +40,6 @@ vaadin-tab:hover {
 }
 
 vaadin-tab[selected] {
-  background-color: var(--lumo-primary-color-10pct);
-  color: var(--lumo-primary-text-color);
+  background-color: #D01E69;
+  color: white;
 }
