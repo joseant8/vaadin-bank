@@ -53,23 +53,10 @@ public class TarjetasDisplayBox extends ClickableCard {
 //        layout.add(bancoEntidad);
         
       
-        // Get saldo
-        LocalDate initial = LocalDate.now();
-        LocalDate start = initial.withDayOfMonth(1);
-        LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
-        DecimalFormat df = new DecimalFormat("#.##");
-        
-        List<Movimiento> listaMovimientos = movimientoService.obtenerMovimientoFechaTarjeta(tarjeta.getId(), start, end);
-        
-        double balance = Utils.obtenerSaldoDeMovimientos(listaMovimientos);
+        DecimalFormat df = new DecimalFormat("#,###.##");
         Span saldoTexto = new Span();
-        if(balance < 0) {
-        	balance *= -1;
-        	saldoTexto.getElement().getStyle().set("color", "#D01E69");
-        }else {
-        	saldoTexto.getElement().getStyle().set("color", "#73CAA5");
-        }
-        saldoTexto.add(df.format(balance)+" €");
+        saldoTexto.getElement().getStyle().set("color", "#D01E69");
+        saldoTexto.add(df.format(tarjeta.getCuenta().getSaldo())+" €");
         saldoTexto.getElement().getStyle().set("font-weight", "bold");
         layout.setHorizontalComponentAlignment(Alignment.CENTER,
         		saldoTexto);
