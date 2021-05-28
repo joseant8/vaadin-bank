@@ -12,9 +12,9 @@ public class IconoMovimientoTarjeta extends HorizontalLayout{
 		super();
 		Image img ;
 		if(movimiento.getTipo().equals(TipoMovimiento.INGRESO)) {
-			img = new Image("images/profit.png", "Profit");
+			img = new Image("images/profit.svg", "Profit");
 		}else {
-			img = new Image("images/devaluation.png", "visa");
+			img = new Image("images/devaluation.svg", "visa");
 		}
 		img.setWidth("20px");
 		img.setHeight("20px");				
