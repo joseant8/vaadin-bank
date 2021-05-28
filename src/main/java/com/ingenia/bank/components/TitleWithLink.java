@@ -16,6 +16,8 @@ public class TitleWithLink extends HorizontalLayout{
 		Anchor anchorMovimientos = new Anchor(link, textoLink);
 		anchorMovimientos.getElement().getStyle().set("margin-left", "0");
 		anchorMovimientos.getElement().getStyle().set("margin-top", "15px");
+		anchorMovimientos.getElement().getStyle().set("color", "#D01E69");
+		anchorMovimientos.getElement().getStyle().set("font-weight", "bold");
 
 		
 		add(tituloMovimiento,anchorMovimientos);
