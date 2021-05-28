@@ -28,4 +28,6 @@ public interface MovimientoService {
 	public List<Movimiento> obtenerMovimientosUsuarioByCategoria(Long idUsuario, MovimientoMesFilter filtroMovimiento);
 
 	public Movimiento crearMovimiento(Movimiento movimientoNuevo) throws Exception;
+
+	public List<Movimiento> obtenerMovimientosDeCuentaOrdenadosFecha(Long idCuenta);
 }

@@ -240,6 +240,12 @@ public class MovimientoServiceImpl implements MovimientoService {
 		}
 	}
 
+	@Override
+	public List<Movimiento> obtenerMovimientosDeCuentaOrdenadosFecha(Long idCuenta) {
+		return movimientoRepository.obtenerMovimientosDeCuentaOrdenadosCuenta(idCuenta);
+
+	}
+
 
 
 }

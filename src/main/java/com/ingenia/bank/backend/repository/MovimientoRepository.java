@@ -30,7 +30,10 @@ public interface MovimientoRepository extends JpaRepository<Movimiento, Long> {
 	@Query("select m from Movimiento m where m.categoria.id= :idCategoria AND m.cuenta.id  in (select c.id from Cuenta c join c.usuarios u where u.id = :idUsuario) and m.fecha BETWEEN :fechaInit AND :fechaFin")
 	List<Movimiento> obtenerMovimientosDeUsuarioByFechaAndCategoria(@Param("idUsuario")Long idUsuario,@Param("idCategoria") Long idCategoria, @Param("fechaInit")Date fechaInit, @Param("fechaFin")Date fechaFin);
 
-	@Query("select m from Movimiento m where m.cuenta.id = :idCuenta AND m.fecha BETWEEN :fechaInit AND :fechaFin ")
+	@Query("select m from Movimiento m where m.cuenta.id = :idCuenta AND m.fecha BETWEEN :fechaInit AND :fechaFin ORDER BY m.fecha")
 	List<Movimiento> obtenerMovimientosDeCuentaFechas(@Param("idCuenta")Long idCuenta, @Param("fechaInit") Date dateInit,@Param("fechaFin") Date datefin);
+
+	@Query("SELECT m FROM Movimiento m WHERE m.cuenta.id= :idCuenta ORDER BY m.fecha DESC")
+	List<Movimiento> obtenerMovimientosDeCuentaOrdenadosCuenta(Long idCuenta);
 	
 }
