@@ -14,8 +14,10 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.provider.SortDirection;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class CuentaDialog extends Dialog {
 
@@ -25,6 +27,7 @@ public class CuentaDialog extends Dialog {
     private Grid<Movimiento> grid;
 
     private Cuenta cuenta;
+    private List<Movimiento> movimientosList;
 
     private FormLayout cuentaData = new FormLayout();
     private TextField cuentaIban;
@@ -35,6 +38,7 @@ public class CuentaDialog extends Dialog {
         super();
         this.movimientoService = movimientoService;
         this.cuentaService = cuentaService;
+        this.movimientosList = movimientoService.obtenerMovimientosDeCuenta(idCuenta);
         setCloseOnEsc(true);
         setWidth("50%");
 
@@ -42,8 +46,6 @@ public class CuentaDialog extends Dialog {
 
         createFormTarjeta();
         createGrid();
-
-        this.grid.setDataProvider(new ListDataProvider<>(movimientoService.obtenerMovimientosDeCuenta(idCuenta)));
 
         add(new H3("Datos Cuenta"),cuentaData, new Hr(),new H3("Movimientos"),grid);
 
@@ -92,7 +94,20 @@ public class CuentaDialog extends Dialog {
         grid.addColumn(movimiento -> movimiento.getConcepto()).setHeader("Concepto").setFlexGrow(1);
         grid.addColumn(movimiento -> dateFormat.format(movimiento.getFecha())).setHeader("Fecha").setWidth("125px").setFlexGrow(0);
 
+        setDataProvider();
+
         return grid;
+    }
+
+
+    /**
+     * Establece el data provider y ordena por fecha los movimientos.
+     */
+    private void setDataProvider(){
+        ListDataProvider<Movimiento> listDataProvider;
+        listDataProvider = new ListDataProvider<>(movimientosList);
+        listDataProvider.setSortOrder(Movimiento::getFecha, SortDirection.DESCENDING);
+        this.grid.setDataProvider(listDataProvider);
     }
 
 }
