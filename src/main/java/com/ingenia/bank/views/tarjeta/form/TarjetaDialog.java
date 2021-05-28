@@ -1,7 +1,9 @@
 package com.ingenia.bank.views.tarjeta.form;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
+import com.vaadin.flow.data.provider.SortDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.ingenia.bank.backend.model.Movimiento;
@@ -29,6 +31,7 @@ public class TarjetaDialog extends Dialog{
 	
 	private Grid<Movimiento> grid;
 
+	private List<Movimiento> movimientosList;
 	
 	private FormLayout tarjetaData = new FormLayout();
 	
@@ -46,6 +49,7 @@ public class TarjetaDialog extends Dialog{
 		super();
 		this.movimientoService = movimientoService;
 		this.tarjetaService = tarjetaService;
+		this.movimientosList = movimientoService.obtenerMovimientosDeTarjeta(idTarjeta);
 		setCloseOnEsc(true);
 		setWidth("50%");
 
@@ -53,10 +57,7 @@ public class TarjetaDialog extends Dialog{
 		
 		createFormTarjeta();
 		createGrid();
-		
-		grid.setDataProvider(new ListDataProvider<>(movimientoService.obtenerMovimientosDeTarjeta(idTarjeta)));
 
-		
 		add(new H3("Datos Tarjeta"),tarjetaData, new Hr(),new H3("Movimientos"),grid);
 
 		
@@ -107,8 +108,20 @@ public class TarjetaDialog extends Dialog{
 		grid.addColumn(c -> c.getCantidad()+" €").setHeader("Cantidad").setFlexGrow(1);
         grid.addColumn(c -> c.getConcepto()).setHeader("Concepto").setFlexGrow(1);
         grid.addColumn(c -> dateFormat.format(c.getFecha())).setHeader("Fecha").setWidth("125px").setFlexGrow(0);
-        
+
+        setDataProvider();
+
         return grid;
+	}
+
+	/**
+	 * Establece el data provider y ordena por fecha los movimientos.
+	 */
+	private void setDataProvider(){
+		ListDataProvider<Movimiento> listDataProvider;
+		listDataProvider = new ListDataProvider<>(movimientosList);
+		listDataProvider.setSortOrder(Movimiento::getFecha, SortDirection.DESCENDING);
+		this.grid.setDataProvider(listDataProvider);
 	}
 
 }
