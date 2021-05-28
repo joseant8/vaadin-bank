@@ -65,6 +65,7 @@ public class MainView extends AppLayout {
 
         Avatar avatar = new Avatar();
         avatar.setImage("images/avatar.svg");
+        avatar.setName(getFullNameCurrentUser());
         layout.add(avatar);
         layout.add(createAvatarMenu());
 
