@@ -43,3 +43,7 @@ vaadin-tab[selected] {
   background-color: #D01E69;
   color: white;
 }
+
+vaadin-drawer-toggle {
+  color:#D01E69;
+}

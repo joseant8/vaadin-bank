@@ -54,6 +54,7 @@ public class MainView extends AppLayout {
     private Component createHeaderContent() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.setId("header");
+        
 //        layout.getThemeList().set("dark", true);
         layout.getElement().getStyle().set("backgorund-color", "#E5E5E5");
         layout.setWidthFull();
@@ -62,7 +63,7 @@ public class MainView extends AppLayout {
         layout.add(new DrawerToggle());
         viewTitle = new H1();
         layout.add(viewTitle);
-
+        
         Avatar avatar = new Avatar();
         avatar.setImage("images/avatar.svg");
         avatar.setName(getFullNameCurrentUser());
