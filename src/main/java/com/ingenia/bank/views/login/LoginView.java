@@ -1,7 +1,11 @@
 package com.ingenia.bank.views.login;
 
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.login.LoginForm;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
@@ -22,8 +26,18 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         login.setAction("login");
         login.setForgotPasswordButtonVisible(false);  // not show link forgot password
+        
+        HorizontalLayout icon = new HorizontalLayout();
+        Image imgLogo1 = new Image("images/ingenia.svg", "Ingenia Bank");
+        imgLogo1.setWidth("200px");
+        imgLogo1.setHeight("150px");
+        Image imgLogo2 = new Image("images/bank.svg", "Ingenia Bank");
+        imgLogo2.setWidth("200px");
+        imgLogo2.setHeight("150px");
+        imgLogo2.getElement().getStyle().set("margin-left", "1px");
+        icon.add(imgLogo1,imgLogo2);
 
-        add(new H1("Ingenia Bank"), login);
+        add(icon, login);
     }
 
 
