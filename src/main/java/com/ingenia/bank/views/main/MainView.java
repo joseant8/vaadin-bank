@@ -153,6 +153,7 @@ public class MainView extends AppLayout {
         hl.add(new Text(getFullNameCurrentUser()));
         hl.add(icon);
         hl.setPadding(true);
+        hl.getElement().getStyle().set("cursor","pointer");
         hl.setAlignItems(FlexComponent.Alignment.AUTO);
 
         return hl;
