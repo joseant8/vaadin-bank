@@ -83,6 +83,7 @@ public class TarjetasDisplayBox extends ClickableCard {
         downPart.setPadding(true);
         
         layout.add(downPart);
+        layout.getElement().getStyle().set("cursor", "pointer");
         add(layout);
         
     }

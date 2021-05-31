@@ -59,6 +59,9 @@ public class CardCuenta extends ClickableCard {
         layout.add(ibanLayout);
         layout.add(saldoLayout);
 
+        // cambio propiedad cursor
+        layout.getElement().getStyle().set("cursor", "pointer");
+
         add(layout);
     }
 
