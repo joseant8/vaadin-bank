@@ -36,8 +36,8 @@ public class CuentaSelectComponent extends Dialog{
 	}
 
     /**
-     * Metodo que se encarga de crear un Grid para la visualizacion de los datos de un movimiento
-     * @return Devuelve un grid con los campos para representar Movimientos
+     * Método que se encarga de crear un Grid con los datos de las cuentas
+     * @return Devuelve un grid con las cuentas
      */
 	private Grid<Cuenta> createGrid() {
 		grid = new Grid<>();
@@ -49,7 +49,7 @@ public class CuentaSelectComponent extends Dialog{
 		grid.addColumn(c -> c.getIban()).setHeader("Iban").setFlexGrow(1);
         grid.addColumn(c -> c.getSaldo()).setHeader("Saldo").setFlexGrow(1);
         grid.addColumn(c -> dateFormat.format(c.getFechaCreacion())).setHeader("Fecha Creacion").setWidth("250px").setFlexGrow(0);
-        
+
         return grid;
 	}
 
