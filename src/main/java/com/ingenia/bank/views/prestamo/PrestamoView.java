@@ -13,7 +13,9 @@ import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.provider.ListDataProvider;
+import com.vaadin.flow.data.provider.SortDirection;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -42,9 +44,8 @@ public class PrestamoView extends VerticalLayout {
 
         this.prestamosUsuario = prestamoService.obtenerPrestamosUsuario(currentUser.get().getId());
 
-        NuevoPrestamoForm prestamoForm = new NuevoPrestamoForm(this.cuentasList);
+        NuevoPrestamoForm prestamoForm = new NuevoPrestamoForm(this.cuentasList, prestamoService, currentUser.get());
         add(prestamoForm);
-
 
         // linea delimitadora
         Hr limiter = new Hr();
@@ -64,7 +65,8 @@ public class PrestamoView extends VerticalLayout {
     private Grid<Prestamo> createGrid() {
         grid = new Grid<>();
         grid.setWidthFull();
-        grid.setDataProvider(new ListDataProvider<>(this.prestamosUsuario));
+
+        loadPrestamosGrid();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -72,12 +74,24 @@ public class PrestamoView extends VerticalLayout {
         grid.addColumn(p -> p.getCuentaIngreso().getIban()).setHeader("Cuenta Ingreso").setFlexGrow(1);
         grid.addColumn(p -> p.getCuentaCobro().getIban()).setHeader("Cuenta Cobro").setFlexGrow(1);
         grid.addColumn(p -> dateFormat.format(p.getFechaInicio())).setHeader("Fecha solicitud").setWidth("250px").setFlexGrow(0);
-        grid.addColumn(p -> p.getInteres() + "%").setHeader("Interés").setFlexGrow(1);
-        grid.addColumn(p -> p.getNumeroCuotas()).setHeader("Cuotas").setFlexGrow(1);
+        grid.addColumn(p -> p.getInteres() + " %").setHeader("Interés").setFlexGrow(1);
+        grid.addColumn(p -> p.getCuota() + " €").setHeader("Cuota").setFlexGrow(1);
+        grid.addColumn(p -> p.getNumeroCuotas()).setHeader("Número de cuotas").setFlexGrow(1);
 
 
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,GridVariant.LUMO_ROW_STRIPES);
         return grid;
+    }
+
+    /**
+     * Carga la lista de préstamos en el grid y los ordena según orden de creación descendente (para que salgan primero los más recientes).
+     */
+    private void loadPrestamosGrid() {
+        //grid.setDataProvider(new ListDataProvider<>(this.prestamosUsuario));
+        ListDataProvider<Prestamo> provider;
+        provider = DataProvider.ofCollection(this.prestamosUsuario);
+        provider.setSortOrder(Prestamo::getId, SortDirection.DESCENDING);
+        grid.setDataProvider(provider);
     }
 
 }
