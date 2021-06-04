@@ -23,6 +23,8 @@ public class Prestamo {
 
     private Double interes;
 
+    private Double cuota;
+
     private Integer numeroCuotas;
 
     private Integer numeroCuotasPagadas = 0;
@@ -32,26 +34,21 @@ public class Prestamo {
     // relaciones
 
     @ManyToOne
-    @JoinColumn(name = "cuenta_ingreso")
+    @JoinColumn(name = "cuenta_ingreso_id")
     private Cuenta cuentaIngreso;
 
     @ManyToOne
-    @JoinColumn(name = "cuenta_cobro")
+    @JoinColumn(name = "cuenta_cobro_id")
     private Cuenta cuentaCobro;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
 
     public Prestamo() {
     }
 
-    public Prestamo(Double cantidad, Date fechaInicio, Date fechaFin, Double interes, Integer numeroCuotas, String concepto, Cuenta cuentaIngreso, Cuenta cuentaCobro) {
-        this.cantidad = cantidad;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
-        this.interes = interes;
-        this.numeroCuotas = numeroCuotas;
-        this.concepto = concepto;
-        this.cuentaIngreso = cuentaIngreso;
-        this.cuentaCobro = cuentaCobro;
-    }
 
     public Long getId() {
         return id;
@@ -87,6 +84,14 @@ public class Prestamo {
 
     public void setInteres(Double interes) {
         this.interes = interes;
+    }
+
+    public Double getCuota() {
+        return cuota;
+    }
+
+    public void setCuota(Double cuota) {
+        this.cuota = cuota;
     }
 
     public Integer getNumeroCuotas() {
@@ -127,5 +132,13 @@ public class Prestamo {
 
     public void setCuentaCobro(Cuenta cuentaCobro) {
         this.cuentaCobro = cuentaCobro;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
