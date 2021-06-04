@@ -2,14 +2,18 @@ package com.ingenia.bank.views.prestamo.form;
 
 import com.ingenia.bank.backend.model.Cuenta;
 import com.ingenia.bank.backend.model.Prestamo;
+import com.ingenia.bank.backend.model.Usuario;
+import com.ingenia.bank.backend.service.PrestamoService;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
@@ -25,26 +29,30 @@ public class NuevoPrestamoForm extends VerticalLayout {
     private FORM_RESULT formResult;
     private static final int NOTIFICATION_DEFAULT_DURATION = 5000;
 
-    private Prestamo prestamo;
-    private Binder<Prestamo> prestamoBinder = new BeanValidationBinder<Prestamo>(Prestamo.class);
 
+    private PrestamoService prestamoService;
+    private Prestamo prestamo;
+    private Usuario currentUser;
     List<Cuenta> cuentasList;
+    private Binder<Prestamo> prestamoBinder = new BeanValidationBinder<Prestamo>(Prestamo.class);
 
     private FormLayout formLayout;
 
-    // los nombres deben coincidir con los atributos de la clase para hacer el binding
+    // los nombres de las varaiables de los campos deben coincidir con los atributos de la clase modelo para hacer el binding
     private ComboBox<Cuenta> cuentaIngreso;
     private ComboBox<Cuenta> cuentaCobro;
-    private TextField lot;
-    private TextField serialNumber;
     //private DatePicker expirationDate;
     private NumberField cantidad;
+    private TextField concepto;
 
-    public NuevoPrestamoForm(List<Cuenta> cuentasList){
+    public NuevoPrestamoForm(List<Cuenta> cuentasList, PrestamoService prestamoService, Usuario currentUser){
+        this.prestamoService = prestamoService;
         this.cuentasList = cuentasList;
+        this.currentUser = currentUser;
+
         this.prestamo = new Prestamo();
 
-        add(createFormLayout(), new Hr(), createToolbarLayout());
+        add(createFormLayout(), createToolbarLayout());
 
         prestamoBinder.bindInstanceFields(this);
     }
@@ -58,53 +66,40 @@ public class NuevoPrestamoForm extends VerticalLayout {
                 new FormLayout.ResponsiveStep("600px", 2),
                 new FormLayout.ResponsiveStep("700px", 3));
 
-
         // Definir los campos del formulario
-
         cuentaIngreso = new ComboBox<Cuenta>();
         cuentaIngreso.setItemLabelGenerator(Cuenta::getIban);
         cuentaIngreso.setLabel("Cuenta Ingreso");
         cuentaIngreso.setItems(this.cuentasList);
         cuentaIngreso.setWidth("300px");
-        prestamoBinder.forField(cuentaIngreso).asRequired("Campo requerido");
+        prestamoBinder.forField(cuentaIngreso).asRequired("Campo cuenta ingreso es requerido");
 
         cuentaCobro = new ComboBox<Cuenta>();
         cuentaCobro.setItemLabelGenerator(Cuenta::getIban);
-        cuentaCobro.setLabel("Cuenta Ingreso");
+        cuentaCobro.setLabel("Cuenta Cobro");
         cuentaCobro.setItems(this.cuentasList);
         cuentaCobro.setWidth("300px");
-        prestamoBinder.forField(cuentaCobro).asRequired("Campo requerido");
-
+        prestamoBinder.forField(cuentaCobro).asRequired("Campo cuenta cobro es requerido");
 
         HorizontalLayout row01 = new HorizontalLayout();
         row01.setPadding(false);
         row01.setMargin(false);
 
-        lot = new TextField();
-        lot.setId("lot");
-        lot.setLabel("Lot");
-        lot.setWidth("200px");
+        cantidad = new NumberField();
+        cantidad.setLabel("Cantidad");
+        cantidad.setWidth("150px");
+        prestamoBinder.forField(cantidad).asRequired("Campo cantidad es requerido");
 
-        serialNumber = new TextField();
-        serialNumber.setId("serial-number");
-        serialNumber.setLabel("Serial number");
+        concepto = new TextField();
+        concepto.setLabel("Concepto");
+        concepto.setWidth("200px");
+        prestamoBinder.forField(concepto);
 
-        row01.add(lot, serialNumber);
-        row01.setFlexGrow(1, serialNumber);
+        row01.add(cantidad);
+        row01.setFlexGrow(1, concepto);
         formLayout.setColspan(row01, 2);
 
-        HorizontalLayout row02 = new HorizontalLayout();
-        row02.setPadding(false);
-        row02.setMargin(false);
-
-        cantidad = new NumberField();
-        //cantidad.setId("cantidad");
-        cantidad.setLabel("Cantidad");
-        prestamoBinder.forField(cantidad).asRequired("Cantidad is required");
-
-        row02.add(cantidad);
-
-        formLayout.add(cuentaIngreso, cuentaCobro, row01, row02);
+        formLayout.add(cuentaIngreso, cuentaCobro, new HtmlComponent("br"), row01);
 
         return formLayout;
     }
@@ -112,21 +107,24 @@ public class NuevoPrestamoForm extends VerticalLayout {
 
     private Component createToolbarLayout() {
 
-        Button saveButton = new Button("Confirmar", event -> {
+        Button previewButton = new Button("Previsualizar préstamo", event -> {
 
             prestamoBinder.writeBeanIfValid(prestamo);
 
+            prestamo = prestamoService.configurarPrestamo(prestamo);
+            prestamo.setUsuario(this.currentUser);
             NuevoPrestamoDialog dialog = new NuevoPrestamoDialog(this.prestamo);
-            dialog.setWidth("700px");
+            dialog.setWidth("800px");
             dialog.setCloseOnEsc(true);
             dialog.setCloseOnOutsideClick(false);
 
-
             dialog.addOpenedChangeListener(e -> {
                 if(!e.isOpened()) {
-                    if (dialog.dialogResultIsSave())
+                    if (dialog.dialogResultIsConfirmed())
                         try {
-                            Notification.show("Stock Saved", NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END);
+                            prestamoService.crearPrestamo(prestamo);
+                            Notification.show("Préstamo solicitado con éxito", NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                            UI.getCurrent().getPage().reload();  // actualiza la página actual
                         } catch (Exception ex) {
                             Notification.show(ex.getMessage(), NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END);
                         }
@@ -138,17 +136,14 @@ public class NuevoPrestamoForm extends VerticalLayout {
 
         });
 
-        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        saveButton.addClickShortcut(Key.ENTER).listenOn(this);
-        saveButton.getElement().getStyle().set("margin-left", "auto");
+        previewButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        previewButton.addClickShortcut(Key.ENTER).listenOn(this);
+        previewButton.getElement().getStyle().set("margin-right", "auto");
 
-        Button cancelButton = new Button("Cancelar", event -> {
-            this.formResult = FORM_RESULT.CANCEL;
-        });
 
-        HorizontalLayout formToolBar = new HorizontalLayout(saveButton, cancelButton);
+        HorizontalLayout formToolBar = new HorizontalLayout(previewButton);
         formToolBar.setWidthFull();
-        formToolBar.getElement().getStyle().set("padding-top", "30px");
+        formToolBar.getElement().getStyle().set("padding-top", "5px");
 
         return formToolBar;
     }
