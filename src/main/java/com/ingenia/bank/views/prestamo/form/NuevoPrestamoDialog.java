@@ -24,22 +24,40 @@ public class NuevoPrestamoDialog extends Dialog {
         VerticalLayout vl = new VerticalLayout();
 
         HorizontalLayout hl1 = new HorizontalLayout();
-        hl1.add(new H5("Cuenta ingreso: "), new H5(prestamo.getCuentaIngreso().getIban()));
+        H5 cuentaIngresoTitle = new H5("Cuenta ingreso: ");
+        H5 cuentaIngresoData = new H5(prestamo.getCuentaIngreso().getIban());
+        cuentaIngresoData.getElement().getStyle().set("color", "#D01E69");
+        hl1.add(cuentaIngresoTitle, cuentaIngresoData);
 
         HorizontalLayout hl2 = new HorizontalLayout();
-        hl2.add(new H5("Cuenta cobro: "), new H5(prestamo.getCuentaCobro().getIban()));
+        H5 cuentaCobroTitle = new H5("Cuenta cobro: ");
+        H5 cuentaCobroData = new H5(prestamo.getCuentaCobro().getIban());
+        cuentaCobroData.getElement().getStyle().set("color", "#D01E69");
+        hl2.add(cuentaCobroTitle, cuentaCobroData);
 
         HorizontalLayout hl3 = new HorizontalLayout();
-        hl3.add(new H5("Cantidad del préstamo: "), new H5(prestamo.getCantidad() + " €"));
+        H5 cantidadTitle = new H5("Cantidad del préstamo: ");
+        H5 cantidadData = new H5(prestamo.getCantidad() + " €");
+        cantidadData.getElement().getStyle().set("color", "#D01E69");
+        hl3.add(cantidadTitle, cantidadData);
 
         HorizontalLayout hl4 = new HorizontalLayout();
-        hl4.add(new H5("Interés: "), new H5(prestamo.getInteres() + " %"));
+        H5 interesTitle = new H5("Interés: ");
+        H5 interesData = new H5(prestamo.getInteres() + " %");
+        interesData.getElement().getStyle().set("color", "#D01E69");
+        hl4.add(interesTitle, interesData);
 
         HorizontalLayout hl5 = new HorizontalLayout();
-        hl5.add(new H5("Cuota: "), new H5(prestamo.getCuota() + " €"));
+        H5 cuotaTitle = new H5("Cuota: ");
+        H5 cuotaData = new H5(prestamo.getCuota() + " €");
+        cuotaData.getElement().getStyle().set("color", "#D01E69");
+        hl5.add(cuotaTitle, cuotaData);
 
         HorizontalLayout hl6 = new HorizontalLayout();
-        hl6.add(new H5("Número de cuotas: "), new H5(prestamo.getNumeroCuotas().toString()));
+        H5 numCuotasTitle = new H5("Número de cuotas: ");
+        H5 numCuotasData = new H5(prestamo.getNumeroCuotas().toString());
+        numCuotasData.getElement().getStyle().set("color", "#D01E69");
+        hl6.add(numCuotasTitle, numCuotasData);
 
         vl.add(hl1, hl2, hl3, hl4, hl5, hl6);
         return vl;
