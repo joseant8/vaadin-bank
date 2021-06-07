@@ -43,13 +43,13 @@ INSERT INTO movimiento (cantidad, tipo, concepto, saldo_actual, categoria_id, cu
 	(15.6, 1, 'Bar Manolo', 4751.19 , 2, 4, 4, '2021-05-30'),
 	(35.04, 1, 'Cine', 6000-35.04 , 1, 2, 2, '2021-03-10'),
 	(20.0, 0, 'Bizum', 6000-35.04+20.0 , 1, 2, null, '2021-03-10'),
-	(33.5, 1, 'Mercadona', 3000+35.04-20.2-60.0-33.5 , 3, 1, 2, '2021-04-12')
+	(33.5, 1, 'Mercadona', 2921.34 , 3, 1, 2, '2021-04-12')
     ;
 
 -- actualizo saldo de las cuentas según los movimientos realizados
-UPDATE cuenta SET saldo = 3000+35.04-20.2-60.0-33.5 WHERE id=1;
+UPDATE cuenta SET saldo = 2921.34 WHERE id=1;
 UPDATE cuenta SET saldo = 4751.19 WHERE id=4;
-UPDATE cuenta SET saldo = 6000-35.04+20.0 WHERE id=2;
+UPDATE cuenta SET saldo = 5984.96 WHERE id=2;
 
 
 -- relaciones usuario_cuenta

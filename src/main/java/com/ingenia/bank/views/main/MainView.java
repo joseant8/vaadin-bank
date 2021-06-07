@@ -7,6 +7,7 @@ import com.ingenia.bank.backend.service.UsuarioService;
 import com.ingenia.bank.views.cuenta.CuentasView;
 import com.ingenia.bank.views.inicio.InicioView;
 import com.ingenia.bank.views.movimiento.MovimientosView;
+import com.ingenia.bank.views.prestamo.PrestamoView;
 import com.ingenia.bank.views.tarjeta.TarjetasView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
@@ -108,7 +109,8 @@ public class MainView extends AppLayout {
         return new Tab[]{createTab("Inicio", InicioView.class),
                 createTab("Cuentas", CuentasView.class),
                 createTab("Tarjetas", TarjetasView.class),
-                createTab("Movimientos", MovimientosView.class)
+                createTab("Movimientos", MovimientosView.class),
+                createTab("Préstamo", PrestamoView.class)
         };
     }
 
