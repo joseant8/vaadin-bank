@@ -5,16 +5,19 @@ import com.ingenia.bank.backend.model.Prestamo;
 import com.ingenia.bank.backend.model.TipoMovimiento;
 import com.ingenia.bank.backend.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 public class PrestamoUtil implements Runnable{
 
-    @Autowired
-    MovimientoService movimientoSerivicio;
+    private static final int TIEMPO_COBRO_CUOTA = 600000;   // 10 minutos
 
-    Prestamo prestamo;
+    private MovimientoService movimientoSerivicio;
 
-    public PrestamoUtil(Prestamo prestamo){
+    private Prestamo prestamo;
+
+    public PrestamoUtil(Prestamo prestamo, MovimientoService movimientoSerivicio){
         this.prestamo = prestamo;
+        this.movimientoSerivicio = movimientoSerivicio;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class PrestamoUtil implements Runnable{
      */
     private void cobroCuotas() throws Exception {
         while(prestamo.getNumeroCuotasPagadas() < prestamo.getNumeroCuotas()){
-            Thread.sleep(5000);   // 5 segundos
+            Thread.sleep(TIEMPO_COBRO_CUOTA);
             prestamo.setNumeroCuotasPagadas(prestamo.getNumeroCuotasPagadas()+1);
             creaMovimientoCobroCuota();
         }
@@ -52,7 +55,7 @@ public class PrestamoUtil implements Runnable{
         Movimiento movimiento = new Movimiento();
         movimiento.setCantidad(prestamo.getCuota());
         movimiento.setTipo(TipoMovimiento.GASTO);
-        movimiento.setConcepto("Cuota " + prestamo.getNumeroCuotas() +  " del préstamo " + prestamo.getId());
+        movimiento.setConcepto("Cuota " + prestamo.getNumeroCuotasPagadas() +  " del préstamo id " + prestamo.getId());
         movimiento.setCuenta(prestamo.getCuentaCobro());
 
         movimientoSerivicio.crearMovimiento(movimiento);
@@ -66,7 +69,7 @@ public class PrestamoUtil implements Runnable{
         Movimiento movimiento = new Movimiento();
         movimiento.setCantidad(prestamo.getCantidad());
         movimiento.setTipo(TipoMovimiento.INGRESO);
-        movimiento.setConcepto("Préstamo " + prestamo.getId());
+        movimiento.setConcepto("Préstamo id " + prestamo.getId());
         movimiento.setCuenta(prestamo.getCuentaIngreso());
 
         movimientoSerivicio.crearMovimiento(movimiento);
