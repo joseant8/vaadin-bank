@@ -72,14 +72,14 @@ public class NuevoPrestamoForm extends VerticalLayout {
         cuentaIngreso.setLabel("Cuenta Ingreso");
         cuentaIngreso.setItems(this.cuentasList);
         cuentaIngreso.setWidth("300px");
-        prestamoBinder.forField(cuentaIngreso).asRequired("Campo cuenta ingreso es requerido");
+        prestamoBinder.forField(cuentaIngreso).asRequired("Cuenta ingreso es requerida").bind(Prestamo::getCuentaIngreso,Prestamo::setCuentaIngreso);
 
         cuentaCobro = new ComboBox<Cuenta>();
         cuentaCobro.setItemLabelGenerator(Cuenta::getIban);
         cuentaCobro.setLabel("Cuenta Cobro");
         cuentaCobro.setItems(this.cuentasList);
         cuentaCobro.setWidth("300px");
-        prestamoBinder.forField(cuentaCobro).asRequired("Campo cuenta cobro es requerido");
+        prestamoBinder.forField(cuentaCobro).asRequired("Cuenta cobro es requerida").bind(Prestamo::getCuentaCobro,Prestamo::setCuentaCobro);
 
         HorizontalLayout row01 = new HorizontalLayout();
         row01.setPadding(false);
@@ -88,7 +88,7 @@ public class NuevoPrestamoForm extends VerticalLayout {
         cantidad = new NumberField();
         cantidad.setLabel("Cantidad");
         cantidad.setWidth("150px");
-        prestamoBinder.forField(cantidad).asRequired("Campo cantidad es requerido");
+        prestamoBinder.forField(cantidad).asRequired("Cantidad es requerida").bind(Prestamo::getCantidad,Prestamo::setCantidad);
 
         concepto = new TextField();
         concepto.setLabel("Concepto");
@@ -109,30 +109,31 @@ public class NuevoPrestamoForm extends VerticalLayout {
 
         Button previewButton = new Button("Previsualizar préstamo", event -> {
 
-            prestamoBinder.writeBeanIfValid(prestamo);
+            if(prestamoBinder.writeBeanIfValid(prestamo)){
 
-            prestamo = prestamoService.configurarPrestamo(prestamo);
-            prestamo.setUsuario(this.currentUser);
-            NuevoPrestamoDialog dialog = new NuevoPrestamoDialog(this.prestamo);
-            dialog.setWidth("800px");
-            dialog.setCloseOnEsc(true);
-            dialog.setCloseOnOutsideClick(false);
+                prestamo = prestamoService.configurarPrestamo(prestamo);
+                prestamo.setUsuario(this.currentUser);
+                NuevoPrestamoDialog dialog = new NuevoPrestamoDialog(this.prestamo);
+                dialog.setWidth("800px");
+                dialog.setCloseOnEsc(true);
+                dialog.setCloseOnOutsideClick(false);
 
-            dialog.addOpenedChangeListener(e -> {
-                if(!e.isOpened()) {
-                    if (dialog.dialogResultIsConfirmed())
-                        try {
-                            prestamoService.crearPrestamo(prestamo);
-                            Notification.show("Préstamo solicitado con éxito", NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                            UI.getCurrent().getPage().reload();  // actualiza la página actual
-                        } catch (Exception ex) {
-                            Notification.show(ex.getMessage(), NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END);
-                        }
-                }
-            });
+                dialog.addOpenedChangeListener(e -> {
+                    if(!e.isOpened()) {
+                        if (dialog.dialogResultIsConfirmed())
+                            try {
+                                prestamoService.crearPrestamo(prestamo);
+                                Notification.show("Préstamo solicitado con éxito", NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                                UI.getCurrent().getPage().reload();  // actualiza la página actual
+                            } catch (Exception ex) {
+                                Notification.show(ex.getMessage(), NOTIFICATION_DEFAULT_DURATION, Notification.Position.TOP_END);
+                            }
+                    }
+                });
 
-            this.formResult = FORM_RESULT.SAVE;
-            dialog.open();
+                this.formResult = FORM_RESULT.SAVE;
+                dialog.open();
+            }
 
         });
 
