@@ -2,6 +2,7 @@ package com.ingenia.bank.backend.service.impl;
 
 import com.ingenia.bank.backend.model.Prestamo;
 import com.ingenia.bank.backend.repository.PrestamoRepository;
+import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.service.PrestamoService;
 import com.ingenia.bank.backend.utils.PrestamoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class PrestamoServiceImpl implements PrestamoService {
     @Autowired
     PrestamoRepository prestamoRepositorio;
 
+    @Autowired
+    MovimientoService movimientoService;
+
     @Override
     public List<Prestamo> obtenerPrestamosUsuario(Long usuario_id) {
         return prestamoRepositorio.obtenerPrestamosUsuario(usuario_id);
@@ -27,7 +31,7 @@ public class PrestamoServiceImpl implements PrestamoService {
     public Prestamo crearPrestamo(Prestamo prestamo){
 
         Prestamo prestamoCreado = prestamoRepositorio.save(prestamo);
-        PrestamoUtil prestamoUtil = new PrestamoUtil(prestamoCreado);
+        PrestamoUtil prestamoUtil = new PrestamoUtil(prestamoCreado, movimientoService);
         Thread prestamoThread=new Thread(prestamoUtil);
         prestamoThread.start();
 
