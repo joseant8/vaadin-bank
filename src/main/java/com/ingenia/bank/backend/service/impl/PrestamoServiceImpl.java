@@ -3,6 +3,7 @@ package com.ingenia.bank.backend.service.impl;
 import com.ingenia.bank.backend.model.Prestamo;
 import com.ingenia.bank.backend.repository.PrestamoRepository;
 import com.ingenia.bank.backend.service.PrestamoService;
+import com.ingenia.bank.backend.utils.PrestamoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,14 @@ public class PrestamoServiceImpl implements PrestamoService {
     }
 
     @Override
-    public Prestamo crearPrestamo(Prestamo prestamo) {
-        return prestamoRepositorio.save(prestamo);
+    public Prestamo crearPrestamo(Prestamo prestamo){
+
+        Prestamo prestamoCreado = prestamoRepositorio.save(prestamo);
+        PrestamoUtil prestamoUtil = new PrestamoUtil(prestamoCreado);
+        Thread prestamoThread=new Thread(prestamoUtil);
+        prestamoThread.start();
+
+        return prestamoCreado;
     }
 
     @Override
