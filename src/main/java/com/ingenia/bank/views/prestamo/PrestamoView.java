@@ -71,12 +71,12 @@ public class PrestamoView extends VerticalLayout {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         grid.addColumn(p -> p.getCantidad() + " €").setHeader("Cantidad").setFlexGrow(1);
-        grid.addColumn(p -> p.getCuentaIngreso().getIban()).setHeader("Cuenta Ingreso").setFlexGrow(1);
-        grid.addColumn(p -> p.getCuentaCobro().getIban()).setHeader("Cuenta Cobro").setFlexGrow(1);
-        grid.addColumn(p -> dateFormat.format(p.getFechaInicio())).setHeader("Fecha solicitud").setWidth("250px").setFlexGrow(0);
+        grid.addColumn(p -> p.getCuentaIngreso().getIban()).setHeader("Cuenta Ingreso").setFlexGrow(0).setWidth("300px");
+        grid.addColumn(p -> p.getCuentaCobro().getIban()).setHeader("Cuenta Cobro").setFlexGrow(0).setWidth("300px");
         grid.addColumn(p -> p.getInteres() + " %").setHeader("Interés").setFlexGrow(1);
         grid.addColumn(p -> p.getCuota() + " €").setHeader("Cuota").setFlexGrow(1);
         grid.addColumn(p -> p.getNumeroCuotas()).setHeader("Número de cuotas").setFlexGrow(1);
+        grid.addColumn(p -> dateFormat.format(p.getFechaInicio())).setHeader("Fecha solicitud").setWidth("150px").setFlexGrow(0);
 
 
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER,GridVariant.LUMO_ROW_STRIPES);
