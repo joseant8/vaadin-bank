@@ -4,29 +4,23 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ingenia.bank.backend.model.Cuenta;
 import com.ingenia.bank.backend.model.Tarjeta;
 import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.backend.service.TarjetaService;
-import com.ingenia.bank.components.CardCuenta;
 import com.ingenia.bank.components.TarjetasDisplayBox;
 import com.ingenia.bank.views.main.MainView;
-import com.ingenia.bank.views.tarjeta.form.TarjetaDialog;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
 @Route(value = "tarjetas", layout = MainView.class)
 @PageTitle("Tarjetas")
 public class TarjetasView extends VerticalLayout {
-	
-	private Long idCuenta;
+
+    private Long idCurrentUser;
 	
 	@Autowired
 	private TarjetaService tarjetaService;
@@ -40,10 +34,9 @@ public class TarjetasView extends VerticalLayout {
 		this.movimientoService = movimientoService;
 		this.tarjetaService = tarjetaService;
 		setSizeFull();
-		
-		idCuenta = (Long) UI.getCurrent().getSession().getAttribute("idCuenta");
-		
-		tarjetasList = tarjetaService.obtenerTarjetaByCuenta(idCuenta);
+
+        this.idCurrentUser = (Long) UI.getCurrent().getSession().getAttribute("idCurrentUser");
+		this.tarjetasList = tarjetaService.obtenerTarjetasByUsuario(idCurrentUser);
 		
 		add(new H2("Tarjetas"),createCardCuentas());
 	}
