@@ -3,10 +3,7 @@ package com.ingenia.bank.backend.service.impl;
 import com.ingenia.bank.backend.model.*;
 import com.ingenia.bank.backend.payload.filter.MovimientoMesFilter;
 import com.ingenia.bank.backend.payload.filter.MovimientosFilter;
-import com.ingenia.bank.backend.repository.CategoriaRepository;
-import com.ingenia.bank.backend.repository.CuentaRepository;
-import com.ingenia.bank.backend.repository.MovimientoRepository;
-import com.ingenia.bank.backend.repository.TarjetaRepository;
+import com.ingenia.bank.backend.repository.*;
 import com.ingenia.bank.backend.service.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -46,6 +43,19 @@ public class MovimientoServiceImpl implements MovimientoService {
 		// Obtenemos todos los movimientos de una cuenta
 		return movimientoRepository.obtenerMovimientosDeCuenta(idCuenta);
 	}
+
+	@Transactional
+	@Override
+	public List<Movimiento> obtenerMovimientosDeUsuario(Long idUsuario) {
+		// Obtenemos todos los movimientos de un usuario (es decir, los movimientos de todas sus cuentas)
+		List<Movimiento> movimientos = new ArrayList<>();
+		List<Cuenta> cuentas = cuentaRepository.obtenerCuentasByUserId(idUsuario);
+		for(Cuenta c: cuentas){
+			movimientos.addAll(c.getMovimientos());
+		}
+		return movimientos;
+	}
+
 
 	@Transactional
 	@Override

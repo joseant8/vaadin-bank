@@ -15,6 +15,8 @@ public interface MovimientoService {
 	
 	public List<Movimiento> obtenerMovimientosDeCuenta(Long idCuenta);
 
+	public List<Movimiento> obtenerMovimientosDeUsuario(Long idUsuario);
+
 	public List<Movimiento> obtenerMovimientosFiltrados(MovimientosFilter filtro);
 	
 	public List<Movimiento> obtenerMovimientoFechaCuenta(Long idCuenta,LocalDate fechaInit, LocalDate fechaFin);
