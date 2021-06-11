@@ -5,7 +5,6 @@ import com.ingenia.bank.backend.model.Cuenta;
 import com.ingenia.bank.backend.service.CuentaService;
 import com.ingenia.bank.backend.service.MovimientoService;
 import com.ingenia.bank.views.cuenta.form.CuentaDialog;
-import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -15,7 +14,6 @@ public class CardCuenta extends ClickableCard {
 
     public CardCuenta(Cuenta cuenta, CuentaService cuentaService, MovimientoService movimientoService) {
         super(event -> {
-            UI.getCurrent().getSession().setAttribute("idCuenta", cuenta.getId());
             new CuentaDialog(cuentaService, movimientoService, cuenta.getId()).open();
         });
 
