@@ -33,9 +33,9 @@ INSERT INTO tarjeta (numero,cuenta_id) VALUES
 	;
 
 INSERT INTO movimiento (cantidad, tipo, concepto, saldo_actual, categoria_id, cuenta_id, tarjeta_id, fecha) values
-    (35.04, 0, 'Clases', 3000+35.04 , 6, 1, null, '2021-05-09'),
-    (20.2, 1, 'Raff Tapas', 3000+35.04-20.2 , 2, 1, 1, '2021-05-10'),
-    (60.0, 1, 'Decathlon', 3000+35.04-20.2-60.0 , 3, 1, null, '2021-05-12'),
+    (35.04, 0, 'Clases', 3000+35.04 , 6, 1, null, '2021-06-09'),
+    (20.2, 1, 'Raff Tapas', 3000+35.04-20.2 , 2, 1, 1, '2021-06-10'),
+    (60.0, 1, 'Decathlon', 3000+35.04-20.2-60.0 , 3, 1, null, '2021-06-12'),
     (15.6, 1, 'Gasto Casa', 3514.54-15.6 , 4, 4, 4, '2021-05-12'),
     (1321.56, 0, 'Nomina', 4820.44, 6, 4, null, '2021-05-03'),
 	(15.6, 1, 'Gasto Casa', 3498.94, 5, 4, 4, '2021-05-12'),
