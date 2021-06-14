@@ -4,14 +4,9 @@ package com.ingenia.bank.views.inicio;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
+import com.ingenia.bank.backend.utils.MovimientoComparatorUtil;
 import com.ingenia.bank.components.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,17 +38,11 @@ import com.ingenia.bank.backend.service.TarjetaService;
 import com.ingenia.bank.backend.service.UsuarioService;
 import com.ingenia.bank.backend.utils.Utils;
 import com.ingenia.bank.views.main.MainView;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.dialog.GeneratedVaadinDialog;
-import com.vaadin.flow.component.dialog.GeneratedVaadinDialog.OpenedChangeEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Hr;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.provider.ListDataProvider;
@@ -66,7 +55,7 @@ import com.vaadin.flow.router.RouteAlias;
 @PageTitle("Inicio")
 public class InicioView extends HorizontalLayout {
 
-	private Long idCuenta;
+	private Long idUsuario;
 
 	private Grid<Movimiento> grid;
 	
@@ -105,9 +94,9 @@ public class InicioView extends HorizontalLayout {
 		Optional<Usuario> user = Utils.getCurrentUser(this.usuarioService);
         
         if(user.isPresent()) {
-        	List<Cuenta> listaCuentasUsuario = this.cuentaService.obtenerTodasCuentasByUsuarioId(user.get().getId());
+        	this.idUsuario = user.get().getId();
 
-        	this.idCuenta = listaCuentasUsuario.get(0).getId();  // TODO cambiar
+        	List<Cuenta> listaCuentasUsuario = this.cuentaService.obtenerTodasCuentasByUsuarioId(idUsuario);
 
 			// Creamos el layout de la parte izquierda
 			VerticalLayout leftLayout = new VerticalLayout();
@@ -122,7 +111,7 @@ public class InicioView extends HorizontalLayout {
 			layoutTarjetasCredito.setPadding(true);
 
 			//Obtenemos las tarjetas de una cuenta
-			List<Tarjeta> listaTarjetas = this.tarjetaService.obtenerTarjetasByUsuario(user.get().getId());
+			List<Tarjeta> listaTarjetas = this.tarjetaService.obtenerTarjetasByUsuario(idUsuario);
 
 			// Creamos el card para cada tarjeta hasta un maximo de 3
 			for (int i = 0; i < listaTarjetas.size() && i < 3; i++) {
@@ -140,8 +129,8 @@ public class InicioView extends HorizontalLayout {
 
 			// Creamos el layout para los movimientos
 			createGrid();
-			//List<Movimiento> listaMovimientos = this.movimientoService.obtenerMovimientosDeCuentaOrdenadosFecha(idCuenta);  // TODO cambiar
-			List<Movimiento> listaMovimientos = this.movimientoService.obtenerMovimientosDeUsuario(user.get().getId());
+			List<Movimiento> listaMovimientos = this.movimientoService.obtenerMovimientosDeUsuario(idUsuario);
+			Collections.sort(listaMovimientos, new MovimientoComparatorUtil());   // ordenamos los movimientos por fecha de forma descendiente
 			// Obtenemos solo los primeros 6 movimientos para mostrar en la pantalla principal
 			if(listaMovimientos.size() > 6) {
 				listaMovimientos = listaMovimientos.subList(0, 6);
@@ -160,7 +149,7 @@ public class InicioView extends HorizontalLayout {
 			// Creamos el titulo para el analisis
 			HorizontalLayout textAnalisis = new HorizontalLayout();
 			textAnalisis.setWidthFull();
-			H2 tituloAnalisis = new H2("Balance Cuenta");
+			H2 tituloAnalisis = new H2("Balance del mes");
 			tituloAnalisis.getElement().getStyle().set("margin-top", "0");
 			tituloAnalisis.getElement().getStyle().set("margin-right", "auto");
 			textAnalisis.add(tituloAnalisis);
@@ -183,8 +172,8 @@ public class InicioView extends HorizontalLayout {
 			LocalDate fechaInit = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1);
 			LocalDate fechaFin = LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), diaFinalMes);
 
-			// Obtenemos la lista de movimientos del mes actual para la cuenta actual y los gastos y los ingresos del mes
-			List<Movimiento> movimientosMes =  this.movimientoService.obtenerMovimientoFechaCuenta(idCuenta,fechaInit,fechaFin);  // TODO con todas las cuentas
+			// Obtenemos la lista de movimientos del mes actual para el usuario actual y los gastos y los ingresos del mes
+			List<Movimiento> movimientosMes = this.movimientoService.obtenerMovimientosFechaUsuario(idUsuario,fechaInit,fechaFin);
 			double gastosMes = Utils.obtenerGastos(movimientosMes);
 			double ingresosMes = Utils.obtenerIngresos(movimientosMes);
 			DecimalFormat df = new DecimalFormat("#.##");
@@ -272,8 +261,8 @@ public class InicioView extends HorizontalLayout {
 		Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int diaFinalMes = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-        
-		List<Movimiento> movimientos = this.movimientoService.obtenerMovimientoFechaCuenta(idCuenta, LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(),1),
+
+		List<Movimiento> movimientos = this.movimientoService.obtenerMovimientosFechaUsuario(idUsuario, LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(),1),
 																							LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonthValue(), diaFinalMes));
 		List<Double> listaGastos = new ArrayList<Double>();
 		List<String> listaFechas = new ArrayList<String>();
@@ -369,9 +358,11 @@ public class InicioView extends HorizontalLayout {
 	private Double[] obtenerMovimientos(List<Categoria> listaCategorias) {
 		Series<Double> serie = new Series<>();
 		Double[] serieData = new Double[listaCategorias.size()];
-		for (int i = 0; i < listaCategorias.size(); i++) {
-			Categoria categoriaActual = listaCategorias.get(i);
-			serieData[i] = Utils.obtenerGastos(this.movimientoService.obtenerMovimientosCuentaByCategoria(idCuenta,new MovimientoMesFilter("05", categoriaActual.getId())));
+		if(idUsuario != null){
+			for (int i = 0; i < listaCategorias.size(); i++) {
+				Categoria categoriaActual = listaCategorias.get(i);
+				serieData[i] = Utils.obtenerGastos(this.movimientoService.obtenerMovimientosUsuarioByCategoria(idUsuario,new MovimientoMesFilter(String.valueOf(LocalDate.now().getMonthValue()), categoriaActual.getId())));
+			}
 		}
 		serie.setData(serieData);
 		return serieData;
