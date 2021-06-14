@@ -12,6 +12,7 @@ import com.ingenia.bank.views.tarjeta.TarjetasView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
 import com.vaadin.flow.component.Text;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -162,7 +163,11 @@ public class MainView extends AppLayout {
     }
 
     private Optional<Usuario> getCurrentUser(){
-        return usuarioService.obtenerUsuarioActualConectado();
+        Optional<Usuario> usuarioConectado = usuarioService.obtenerUsuarioActualConectado();
+        if(usuarioConectado.isPresent()){
+            UI.getCurrent().getSession().setAttribute("idCurrentUser", usuarioConectado.get().getId());
+        }
+        return usuarioConectado;
     }
 
     private String getFullNameCurrentUser(){

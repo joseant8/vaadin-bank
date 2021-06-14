@@ -10,7 +10,9 @@ public interface TarjetaService {
 	
 	public Tarjeta crearTarjeta(Tarjeta tarjetaNueva);
 	
-	public List<Tarjeta> obtenerTarjetaByCuenta(Long cuentaId);
+	public List<Tarjeta> obtenerTarjetasByCuenta(Long cuentaId);
+
+	public List<Tarjeta> obtenerTarjetasByUsuario(Long usuarioId);
 
 	public Tarjeta obtenerTarjetaByNumeroTarjeta(Long numeroTarjeta);
 	

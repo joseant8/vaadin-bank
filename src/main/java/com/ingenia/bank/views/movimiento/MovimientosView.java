@@ -25,18 +25,17 @@ public class MovimientosView extends VerticalLayout {
 
     private MovimientoService movimientoService;
 
-    private Long idCuentaActual;
+    private Long idCurrentUser;
 
     private List<Movimiento> movimientosList;
     private Grid<Movimiento> grid = new Grid<>(Movimiento.class);
-    //private Optional<Usuario> currentUser;
 
     public MovimientosView(MovimientoService movimientoService){
         addClassName("movimientos-view");
 
         this.movimientoService = movimientoService;
-        this.idCuentaActual = (Long) UI.getCurrent().getSession().getAttribute("idCuenta");
-        this.movimientosList = movimientoService.obtenerMovimientosDeCuenta(this.idCuentaActual);
+        this.idCurrentUser = (Long) UI.getCurrent().getSession().getAttribute("idCurrentUser");
+        this.movimientosList = movimientoService.obtenerMovimientosDeUsuario(idCurrentUser);
 
         setPadding(true);
         add(new H2("Movimientos"), createGridMovimientos());
