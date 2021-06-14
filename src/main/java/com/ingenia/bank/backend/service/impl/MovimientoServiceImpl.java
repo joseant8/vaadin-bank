@@ -30,6 +30,9 @@ public class MovimientoServiceImpl implements MovimientoService {
 	@Autowired
 	TarjetaRepository tarjetaRepository;
 
+	@Autowired
+	UsuarioRepository usuarioRepository;
+
 	@Transactional
 	@Override
 	public List<Movimiento> obtenerMovimientosDeTarjeta(Long idTarjeta) {
@@ -142,6 +145,19 @@ public class MovimientoServiceImpl implements MovimientoService {
 		} 
 		
 		return movimientoRepository.obtenerMovimientosDeCuentaFechas(idCuenta, dateInit , datefin);
+	}
+
+	@Override
+	@Transactional
+	public List<Movimiento> obtenerMovimientosFechaUsuario(Long idUsuario, LocalDate fechaInit, LocalDate fechaFin) {
+		Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
+		List<Movimiento> movimientosFiltroFecha = new ArrayList<>();
+		if(usuario.isPresent()){
+			for(Cuenta c: usuario.get().getCuentas()){
+				movimientosFiltroFecha.addAll(obtenerMovimientoFechaCuenta(c.getId(), fechaInit, fechaFin));
+			}
+		}
+		return movimientosFiltroFecha;
 	}
 
 	@Override

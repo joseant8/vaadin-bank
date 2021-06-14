@@ -23,6 +23,8 @@ public interface MovimientoService {
 
 	public List<Movimiento> obtenerMovimientoFechaTarjeta(Long idTarjeta,LocalDate fechaInit, LocalDate fechaFin);
 
+	public List<Movimiento> obtenerMovimientosFechaUsuario(Long idCuenta,LocalDate fechaInit, LocalDate fechaFin);
+
 	public List<Movimiento> obtenerMovimientosCuentaByCategoria(Long idCuenta, MovimientoMesFilter filtroMovimiento);
 
 	public List<Movimiento> obtenerMovimientosTarjetaByCategoria(Long idTarjeta, MovimientoMesFilter filtroMovimiento);
