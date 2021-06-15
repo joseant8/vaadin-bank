@@ -32,8 +32,8 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         imgLogo1.setWidth("200px");
         imgLogo1.setHeight("150px");
         Image imgLogo2 = new Image("images/bank.svg", "Ingenia Bank");
-        imgLogo2.setWidth("200px");
-        imgLogo2.setHeight("150px");
+        imgLogo2.setWidth("135px");
+        //imgLogo2.setHeight("150px");
         imgLogo2.getElement().getStyle().set("margin-left", "1px");
         icon.add(imgLogo1,imgLogo2);
 

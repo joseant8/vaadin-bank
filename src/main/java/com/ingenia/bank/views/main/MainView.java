@@ -107,17 +107,25 @@ public class MainView extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[]{createTab("Inicio", InicioView.class),
-                createTab("Cuentas", CuentasView.class),
-                createTab("Tarjetas", TarjetasView.class),
-                createTab("Movimientos", MovimientosView.class),
-                createTab("Préstamo", PrestamoView.class)
+        return new Tab[]{createTabIcon("Inicio", VaadinIcon.HOME, InicioView.class),
+                createTabIcon("Cuentas", VaadinIcon.USERS, CuentasView.class),
+                createTabIcon("Tarjetas", VaadinIcon.CREDIT_CARD, TarjetasView.class),
+                createTabIcon("Movimientos", VaadinIcon.EXCHANGE, MovimientosView.class),
+                createTabIcon("Préstamo", VaadinIcon.INVOICE, PrestamoView.class)
         };
     }
 
     private static Tab createTab(String text, Class<? extends Component> navigationTarget) {
         final Tab tab = new Tab();
         tab.add(new RouterLink(text, navigationTarget));
+        ComponentUtil.setData(tab, Class.class, navigationTarget);
+        return tab;
+    }
+
+    private static Tab createTabIcon(String text, VaadinIcon vaadinIcon, Class<? extends Component> navigationTarget) {
+        final Tab tab = new Tab();
+        Icon icon = new Icon(vaadinIcon);
+        tab.add(icon, new RouterLink(text, navigationTarget));
         ComponentUtil.setData(tab, Class.class, navigationTarget);
         return tab;
     }
